@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "401365433102",
+    "project_id": "cinee-7d8f9",
+    "storage_bucket": "cinee-7d8f9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:401365433102:android:bf3cbecd41951b0688755f",
+        "android_client_info": {
+          "package_name": "com.example.cinee"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDU7zexsoCl-gmeJkACRAqpZUXwQrd3eLk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
