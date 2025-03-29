@@ -271,6 +271,7 @@ fun CineeTheme(
   MaterialTheme(
     colorScheme = colorScheme,
     typography = AppTypography,
+      shapes = Shapes,
     content = content
   )
 }
