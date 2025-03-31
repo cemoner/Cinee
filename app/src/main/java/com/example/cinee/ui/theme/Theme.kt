@@ -269,10 +269,10 @@ fun CineeTheme(
   }
 
   MaterialTheme(
-    colorScheme = colorScheme,
-    typography = AppTypography,
+      colorScheme = colorScheme,
+      typography = AppTypography,
       shapes = Shapes,
-    content = content
+      content = content
   )
 }
 
