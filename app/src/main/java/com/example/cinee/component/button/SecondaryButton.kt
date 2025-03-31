@@ -7,13 +7,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import com.example.cinee.component.text.BodyText
 import com.example.cinee.ui.theme.CineeTheme
 import com.example.cinee.ui.theme.Dimens
 
@@ -25,15 +25,17 @@ fun SecondaryButton(
     enabled: Boolean = true
 )
 {
+    val buttonColors = ButtonDefaults.outlinedButtonColors(
+        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
+    )
+
     OutlinedButton (
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
         shape = MaterialTheme.shapes.medium,
-        colors = ButtonDefaults.outlinedButtonColors(
-            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
-            disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
-        ),
+        colors = buttonColors,
         border = BorderStroke(
             width = 1.dp,
             color = when {
@@ -42,10 +44,10 @@ fun SecondaryButton(
             }
         )
     ) {
-        Text(
+        BodyText(
             text = text,
-            style = MaterialTheme.typography.labelLarge,
             textAlign = TextAlign.Center,
+            color = if(enabled) buttonColors.contentColor else buttonColors.disabledContentColor,
             modifier = Modifier.padding(Dimens.paddingSmall)
         )
     }
@@ -53,7 +55,7 @@ fun SecondaryButton(
 
 
 // Preview
-@Preview(name = "Primary Button", showBackground = true)
+@Preview(name = "Secondary Button", showBackground = true)
 @PreviewLightDark
 @Composable
 fun SecondaryButtonPreview() {
