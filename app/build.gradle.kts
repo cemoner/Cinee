@@ -76,6 +76,8 @@ dependencies {
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     implementation(libs.androidx.ui.text.google.fonts)
+    implementation(libs.androidx.material3.lint)
+    implementation(libs.androidx.material.icons.extended)
     annotationProcessor(libs.room.compiler)
 
     // Dependency Injection

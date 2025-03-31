@@ -73,10 +73,10 @@ fun CircularProgressBarPreview() {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            Text("Circular Determinate Progress")
+            Text("Circular Determinate Progress",color = MaterialTheme.colorScheme.onBackground)
             CircularDeterminateProgressBar(progress = 0.7f)
             
-            Text("Circular Indeterminate Progress")
+            Text("Circular Indeterminate Progress",color = MaterialTheme.colorScheme.onBackground)
             CircularIndeterminateProgressBar()
         }
     }

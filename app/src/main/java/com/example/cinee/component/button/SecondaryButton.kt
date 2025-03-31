@@ -26,7 +26,7 @@ fun SecondaryButton(
 )
 {
     val buttonColors = ButtonDefaults.outlinedButtonColors(
-        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        contentColor = MaterialTheme.colorScheme.primary,
         disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
     )
 

@@ -60,10 +60,10 @@ fun LinearProgressBarPreview() {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
-            Text("Linear Determinate Progress")
+            Text("Linear Determinate Progress",color = MaterialTheme.colorScheme.onBackground)
             LinearDeterminateProgressBar(progress = 0.7f)
             
-            Text("Linear Indeterminate Progress")
+            Text("Linear Indeterminate Progress",color = MaterialTheme.colorScheme.onBackground)
             LinearIndeterminateProgressBar()
         }
     }

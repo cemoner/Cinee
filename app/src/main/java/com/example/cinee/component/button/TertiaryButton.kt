@@ -24,7 +24,7 @@ fun TertiaryButton(
     enabled: Boolean = true
 ){
     val buttonColors = ButtonDefaults.textButtonColors(
-        contentColor = MaterialTheme.colorScheme.onSurface,
+        contentColor = MaterialTheme.colorScheme.primary,
         disabledContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f)
     )
 
