@@ -8,22 +8,20 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.example.cinee.component.progress.CircularDeterminateProgressBar
+import com.example.cinee.component.progress.LinearDeterminateProgressBar
 import com.example.cinee.ui.theme.CineeTheme
 import kotlinx.coroutines.delay
-import androidx.compose.runtime.LaunchedEffect
-import com.example.cinee.component.bottomsheet.CustomBottomSheet
-import com.example.cinee.component.progress.LinearDeterminateProgressBar
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +39,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppScreen(modifier: Modifier = Modifier) {
     Scaffold(
@@ -63,10 +60,6 @@ fun AppScreen(modifier: Modifier = Modifier) {
                     progress += 0.01f
                 }
             }
-            CustomBottomSheet(
-                onDismissRequest = { },
-                title = "Sample Bottom Sheet",
-            ) { }
         }
     }
 }
