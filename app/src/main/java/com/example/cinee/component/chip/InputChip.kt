@@ -4,31 +4,34 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.InputChip
+import androidx.compose.material3.InputChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.example.cinee.ui.theme.CineeTheme
 
 @Composable
-fun CustomFilterChip(
+fun CustomInputChip(
     selected: Boolean,
-    onSelectedChange: (Boolean) -> Unit,
+    onClick: () -> Unit,
     label: String,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
+    leadingIcon: ImageVector? = null,
+    trailingIcon: ImageVector? = null
 ) {
-    FilterChip(
+    InputChip(
         selected = selected,
-        onClick = { onSelectedChange(!selected) },
+        onClick = onClick,
         label = { 
             Text(
                 text = label,
@@ -37,22 +40,31 @@ fun CustomFilterChip(
         },
         modifier = modifier,
         enabled = enabled,
-        leadingIcon = if (selected) {
+        leadingIcon = leadingIcon?.let { 
             {
                 Icon(
-                    imageVector = Icons.Default.Done,
-                    contentDescription = "Selected",
+                    imageVector = it,
+                    contentDescription = null,
                     modifier = Modifier.padding(start = 4.dp)
                 )
             }
-        } else null,
+        },
+        trailingIcon = trailingIcon?.let {
+            {
+                Icon(
+                    imageVector = it,
+                    contentDescription = "Remove",
+                    modifier = Modifier.padding(end = 4.dp)
+                )
+            }
+        },
         shape = MaterialTheme.shapes.small,
-        border = FilterChipDefaults.filterChipBorder(
+        border = InputChipDefaults.inputChipBorder(
             enabled = enabled,
             selected = selected,
             borderColor = MaterialTheme.colorScheme.outline
         ),
-        colors = FilterChipDefaults.filterChipColors(
+        colors = InputChipDefaults.inputChipColors(
             containerColor = MaterialTheme.colorScheme.surface,
             labelColor = MaterialTheme.colorScheme.onSurface,
             selectedContainerColor = MaterialTheme.colorScheme.secondaryContainer,
@@ -63,33 +75,40 @@ fun CustomFilterChip(
     )
 }
 
-@Preview(name = "Filter Chip", showBackground = true)
+@Preview(name = "Input Chip", showBackground = true)
 @PreviewLightDark
 @Composable
-fun FilterChipPreview() {
+fun InputChipPreview() {
     CineeTheme {
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(8.dp)
         ) {
-            CustomFilterChip(
+            CustomInputChip(
                 selected = true,
-                onSelectedChange = { },
-                label = "Selected"
+                onClick = { },
+                label = "Selected",
+                trailingIcon = Icons.Default.Close
             )
-            CustomFilterChip(
+            CustomInputChip(
                 selected = false,
-                onSelectedChange = { },
-                label = "Unselected"
+                onClick = { },
+                label = "Unselected",
+                trailingIcon = Icons.Default.Close
             )
-            CustomFilterChip(
+            CustomInputChip(
                 selected = false,
-                onSelectedChange = { },
+                onClick = { },
                 label = "Disabled",
-                enabled = false
+                enabled = false,
+                trailingIcon = Icons.Default.Close
+            )
+            CustomInputChip(
+                selected = false,
+                onClick = { },
+                label = "No Icon"
             )
         }
     }
-}
-
+} 
