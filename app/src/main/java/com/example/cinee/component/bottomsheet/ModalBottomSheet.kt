@@ -21,7 +21,7 @@ import com.example.cinee.ui.theme.CineeTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CustomBottomSheet(
+fun ModalBottomSheet(
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
     sheetState: SheetState = rememberModalBottomSheetState(),
@@ -60,14 +60,14 @@ fun CustomBottomSheet(
 @Preview(name = "Bottom Sheet", showBackground = true)
 @PreviewLightDark
 @Composable
-fun CustomBottomSheetPreview() {
+fun ModalBottomSheetPreview() {
     CineeTheme {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            CustomBottomSheet(
+            ModalBottomSheet(
                 onDismissRequest = { },
                 title = "Sample Bottom Sheet",
                 content = {
