@@ -58,7 +58,7 @@ fun CustomInputChip(
                 )
             }
         },
-        shape = MaterialTheme.shapes.small,
+        shape = MaterialTheme.shapes.extraSmall,
         border = InputChipDefaults.inputChipBorder(
             enabled = enabled,
             selected = selected,

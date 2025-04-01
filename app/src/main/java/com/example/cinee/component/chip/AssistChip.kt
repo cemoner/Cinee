@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.example.cinee.ui.theme.CineeTheme
 
 @Composable
-fun ActionChip(
+fun AssistChip(
     onClick: () -> Unit,
     label: String,
     modifier: Modifier = Modifier,
@@ -29,7 +29,7 @@ fun ActionChip(
 ) {
     AssistChip(
         onClick = onClick,
-        label = { 
+        label = {
             Text(
                 text = label,
                 style = MaterialTheme.typography.labelLarge
@@ -37,7 +37,7 @@ fun ActionChip(
         },
         modifier = modifier,
         enabled = enabled,
-        leadingIcon = icon?.let { 
+        leadingIcon = icon?.let {
             {
                 Icon(
                     imageVector = it,
@@ -46,7 +46,7 @@ fun ActionChip(
                 )
             }
         },
-        shape = MaterialTheme.shapes.small,
+        shape = MaterialTheme.shapes.extraSmall,
         border = AssistChipDefaults.assistChipBorder(
             enabled = enabled,
             borderColor = MaterialTheme.colorScheme.outline
@@ -65,25 +65,25 @@ fun ActionChip(
 @Preview(name = "Action Chip", showBackground = true)
 @PreviewLightDark
 @Composable
-fun ActionChipPreview() {
+fun AssistChipPreview() {
     CineeTheme {
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.padding(8.dp)
         ) {
-            ActionChip(
+            AssistChip(
                 onClick = { },
                 label = "Add to List",
                 icon = Icons.Default.Add
             )
-            ActionChip(
+            AssistChip(
                 onClick = { },
                 label = "Disabled",
                 icon = Icons.Default.Add,
                 enabled = false
             )
-            ActionChip(
+            AssistChip(
                 onClick = { },
                 label = "No Icon"
             )

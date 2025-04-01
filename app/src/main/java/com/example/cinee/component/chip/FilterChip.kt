@@ -46,7 +46,7 @@ fun CustomFilterChip(
                 )
             }
         } else null,
-        shape = MaterialTheme.shapes.small,
+        shape = MaterialTheme.shapes.extraSmall,
         border = FilterChipDefaults.filterChipBorder(
             enabled = enabled,
             selected = selected,
