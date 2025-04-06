@@ -2,18 +2,28 @@ package com.example.cinee.component.appbar
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
-import androidx.compose.ui.unit.dp
+import com.example.cinee.ui.theme.Dimens
+import com.example.cinee.ui.theme.Shapes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,6 +54,10 @@ fun CineeTopAppBar(
         actions = actions,
         colors = colors,
         scrollBehavior = scrollBehavior,
+        windowInsets = WindowInsets(
+            top = CineeTopAppBarDefaults.DefaultPadding,
+            bottom = CineeTopAppBarDefaults.DefaultPadding,
+        )
     )
 }
 
@@ -74,8 +88,8 @@ fun CineeTopAppBarDefaults.MenuNavigationIcon(
 }
 
 object CineeTopAppBarDefaults {
-    val DefaultPadding = 16.dp
-    val DefaultIconSize = 24.dp
+    val DefaultPadding =  Dimens.paddingExtraSmall
+    val DefaultIconSize = Shapes.medium
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
