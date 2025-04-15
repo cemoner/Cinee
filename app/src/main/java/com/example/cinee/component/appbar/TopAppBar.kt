@@ -32,12 +32,13 @@ fun CineeTopAppBar(
     modifier: Modifier = Modifier,
     navigationIcon: @Composable (() -> Unit) = {},
     actions: @Composable RowScope.() -> Unit = {},
-    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(
-        containerColor = MaterialTheme.colorScheme.surface,
-        titleContentColor = MaterialTheme.colorScheme.onSurface,
-        navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
-        actionIconContentColor = MaterialTheme.colorScheme.onSurface,
-    ),
+    colors: TopAppBarColors =
+        TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            titleContentColor = MaterialTheme.colorScheme.onSurface,
+            navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+            actionIconContentColor = MaterialTheme.colorScheme.onSurface,
+        ),
     scrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
     TopAppBar(
@@ -54,10 +55,11 @@ fun CineeTopAppBar(
         actions = actions,
         colors = colors,
         scrollBehavior = scrollBehavior,
-        windowInsets = WindowInsets(
-            top = CineeTopAppBarDefaults.DefaultPadding,
-            bottom = CineeTopAppBarDefaults.DefaultPadding,
-        )
+        windowInsets =
+            WindowInsets(
+                top = CineeTopAppBarDefaults.DefaultPadding,
+                bottom = CineeTopAppBarDefaults.DefaultPadding,
+            ),
     )
 }
 
@@ -88,7 +90,7 @@ fun CineeTopAppBarDefaults.MenuNavigationIcon(
 }
 
 object CineeTopAppBarDefaults {
-    val DefaultPadding =  Dimens.paddingExtraSmall
+    val DefaultPadding = Dimens.paddingExtraSmall
     val DefaultIconSize = Shapes.medium
 }
 
@@ -101,7 +103,7 @@ fun CineeTopAppBarPreview() {
         Column {
             // Basic TopAppBar
             CineeTopAppBar(
-                title = "Basic TopAppBar"
+                title = "Basic TopAppBar",
             )
 
             // TopAppBar with back navigation
@@ -109,9 +111,9 @@ fun CineeTopAppBarPreview() {
                 title = "With Back Navigation",
                 navigationIcon = {
                     CineeTopAppBarDefaults.BackNavigationIcon(
-                        onClick = {}
+                        onClick = {},
                     )
-                }
+                },
             )
 
             // TopAppBar with menu navigation
@@ -119,9 +121,9 @@ fun CineeTopAppBarPreview() {
                 title = "With Menu Navigation",
                 navigationIcon = {
                     CineeTopAppBarDefaults.MenuNavigationIcon(
-                        onClick = {}
+                        onClick = {},
                     )
-                }
+                },
             )
 
             // TopAppBar with actions
@@ -131,29 +133,29 @@ fun CineeTopAppBarPreview() {
                     IconButton(onClick = {}) {
                         Icon(
                             imageVector = Icons.Default.Search,
-                            contentDescription = "Search"
+                            contentDescription = "Search",
                         )
                     }
                     IconButton(onClick = {}) {
                         Icon(
                             imageVector = Icons.Default.Share,
-                            contentDescription = "Share"
+                            contentDescription = "Share",
                         )
                     }
-                }
+                },
             )
 
             // TopAppBar with custom colors
             CineeTopAppBar(
                 title = "Custom Colors",
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
-                    actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
-                )
+                colors =
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        titleContentColor = MaterialTheme.colorScheme.onPrimary,
+                        navigationIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                        actionIconContentColor = MaterialTheme.colorScheme.onPrimary,
+                    ),
             )
         }
     }
 }
-

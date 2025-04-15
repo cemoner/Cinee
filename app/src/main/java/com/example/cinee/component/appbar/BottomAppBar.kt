@@ -14,7 +14,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CineeBottomAppBar(
     modifier: Modifier = Modifier,
@@ -39,12 +38,13 @@ fun CineeBottomAppBar(
 }
 
 object CineeBottomAppBarDefaults {
-    val ContentPadding = androidx.compose.foundation.layout.PaddingValues(
-        start = 16.dp,
-        end = 16.dp,
-        bottom = 8.dp,
-    )
-    
+    val ContentPadding =
+        androidx.compose.foundation.layout.PaddingValues(
+            start = 16.dp,
+            end = 16.dp,
+            bottom = 8.dp,
+        )
+
     val IconSize = 24.dp
     val IconPadding = 8.dp
     val FabPadding = 16.dp
@@ -62,33 +62,33 @@ fun CineeBottomAppBarPreview() {
                     IconButton(onClick = {}) {
                         Icon(
                             imageVector = Icons.Default.Home,
-                            contentDescription = "Home"
+                            contentDescription = "Home",
                         )
                     }
                     IconButton(onClick = {}) {
                         Icon(
                             imageVector = Icons.Default.Search,
-                            contentDescription = "Search"
+                            contentDescription = "Search",
                         )
                     }
                     IconButton(onClick = {}) {
                         Icon(
                             imageVector = Icons.Default.Person,
-                            contentDescription = "Profile"
+                            contentDescription = "Profile",
                         )
                     }
-                }
+                },
             )
 
             // BottomAppBar with FAB
             CineeBottomAppBar(
                 floatingActionButton = {
                     FloatingActionButton(
-                        onClick = {}
+                        onClick = {},
                     ) {
                         Icon(
                             imageVector = Icons.Default.Add,
-                            contentDescription = "Add"
+                            contentDescription = "Add",
                         )
                     }
                 },
@@ -96,22 +96,22 @@ fun CineeBottomAppBarPreview() {
                     IconButton(onClick = {}) {
                         Icon(
                             imageVector = Icons.Default.Home,
-                            contentDescription = "Home"
+                            contentDescription = "Home",
                         )
                     }
                     IconButton(onClick = {}) {
                         Icon(
                             imageVector = Icons.Default.Search,
-                            contentDescription = "Search"
+                            contentDescription = "Search",
                         )
                     }
                     IconButton(onClick = {}) {
                         Icon(
                             imageVector = Icons.Default.Person,
-                            contentDescription = "Profile"
+                            contentDescription = "Profile",
                         )
                     }
-                }
+                },
             )
 
             // BottomAppBar with custom colors
@@ -122,24 +122,23 @@ fun CineeBottomAppBarPreview() {
                     IconButton(onClick = {}) {
                         Icon(
                             imageVector = Icons.Default.Home,
-                            contentDescription = "Home"
+                            contentDescription = "Home",
                         )
                     }
                     IconButton(onClick = {}) {
                         Icon(
                             imageVector = Icons.Default.Search,
-                            contentDescription = "Search"
+                            contentDescription = "Search",
                         )
                     }
                     IconButton(onClick = {}) {
                         Icon(
                             imageVector = Icons.Default.Person,
-                            contentDescription = "Profile"
+                            contentDescription = "Profile",
                         )
                     }
-                }
+                },
             )
         }
     }
 }
-
