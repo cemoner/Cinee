@@ -61,7 +61,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-
+    implementation(libs.androidx.material3.adaptive.navigation.suite)
     // MVVM
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
@@ -90,6 +90,7 @@ dependencies {
 
     // Navigation
     implementation(libs.navigation.compose)
+
 
     // Pagination
     implementation(libs.paging.compose)
