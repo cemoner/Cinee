@@ -5,29 +5,42 @@ import kotlinx.serialization.Serializable
 sealed class Destination {
     // Home
     @Serializable
-    object Home : Destination()
+    object HomeGraph:Destination()
 
     @Serializable
-    object Search : Destination()
+    object Home : Destination()
 
     @Serializable
     data class MovieDetails(
         val movieId: Int,
     ) : Destination()
 
-    // Favorites
-    @Serializable
-    object Favorites : Destination()
+    // Watchlist
 
-    // Authentication
+    @Serializable
+    object WatchlistGraph : Destination()
+
+    @Serializable
+    object Watchlist : Destination()
+
+    // Profile
+
+    @Serializable
+    object ProfileGraph : Destination()
+
     @Serializable
     object Profile : Destination()
 
-    @Serializable
-    object Login : Destination()
+    // Authentication
 
     @Serializable
-    object Register : Destination()
+    object AuthenticationGraph : Destination()
+
+    @Serializable
+    object SignIn : Destination()
+
+    @Serializable
+    object SignUp : Destination()
 
     @Serializable
     object ForgotPassword : Destination()

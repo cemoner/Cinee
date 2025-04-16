@@ -1,0 +1,100 @@
+package com.example.cinee.navigation
+
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
+import androidx.navigation.toRoute
+import com.example.cinee.feature.auth.presentation.composable.ForgotPasswordScreen
+import com.example.cinee.feature.auth.presentation.composable.SignInScreen
+import com.example.cinee.feature.auth.presentation.composable.SignUpScreen
+import com.example.cinee.feature.home.presentation.composable.HomeScreen
+import com.example.cinee.feature.home.presentation.composable.MovieDetailsScreen
+import com.example.cinee.feature.profile.presentation.composable.ProfileScreen
+import com.example.cinee.feature.watchlist.presentation.composable.WatchlistScreen
+import com.example.cinee.navigation.model.Destination
+
+fun NavGraphBuilder.createGraph(
+    navController: NavHostController,
+
+){
+    navigation<Destination.HomeGraph>(startDestination = Destination.Home){
+        composable<Destination.Home>{
+            HomeScreen(
+                onMovieClick = { movieId ->
+                    navigateTo(
+                        navController = navController,
+                        destination = Destination.MovieDetails(movieId))
+                }
+            )
+        }
+
+        composable<Destination.MovieDetails>{ backStackEntry ->
+            val movie = backStackEntry.toRoute<Destination.MovieDetails>()
+            MovieDetailsScreen(
+                movie.movieId,
+                onBackClick = { popBackStack(navController) }
+            )
+        }
+    }
+
+    navigation<Destination.ProfileGraph>(startDestination = Destination.Profile){
+        composable<Destination.Profile>{
+            ProfileScreen(
+                onLogoutClick = {
+                    navigateTo(
+                        navController = navController,
+                        destination = Destination.AuthenticationGraph,
+                        popUpTo = Destination.ProfileGraph,
+                        inclusive = true
+                    )
+                }
+            )
+        }
+    }
+
+    navigation<Destination.WatchlistGraph>(startDestination = Destination.Watchlist){
+        composable<Destination.Watchlist>{
+            WatchlistScreen(
+                onMovieClick = { movieId ->
+                    navigateTo(
+                        navController = navController,
+                        destination = Destination.MovieDetails(movieId))
+                }
+            )
+        }
+
+    }
+    navigation<Destination.AuthenticationGraph>(startDestination = Destination.SignIn){
+        composable<Destination.SignIn>{
+            SignInScreen(
+                onSignUpClick = { navigateTo(
+                    navController = navController,
+                    destination = Destination.SignUp) },
+
+                onForgotPasswordClick = { navigateTo(
+                    navController = navController,
+                    destination = Destination.ForgotPassword) },
+
+                onSignInClick = { navigateTo(
+                    navController = navController,
+                    destination = Destination.HomeGraph) }
+            )
+        }
+        composable<Destination.SignUp>{
+            SignUpScreen(){
+                navigateTo(
+                    navController = navController,
+                    destination = Destination.SignIn)
+            }
+        }
+
+        composable<Destination.ForgotPassword>{
+            ForgotPasswordScreen(){
+                navigateTo(
+                    navController = navController,
+                    destination = Destination.SignIn)
+            }
+        }
+    }
+}
