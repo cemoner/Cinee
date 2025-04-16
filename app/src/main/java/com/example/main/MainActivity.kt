@@ -1,4 +1,4 @@
-package com.example.cinee
+package com.example.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -29,7 +29,10 @@ import com.example.cinee.navigation.model.AppDestinations
 import com.example.cinee.navigation.model.Destination
 import com.example.cinee.navigation.navigateTo
 import com.example.cinee.ui.theme.CineeTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

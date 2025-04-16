@@ -1,4 +1,4 @@
-package com.example.cinee
+package com.example.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
