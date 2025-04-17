@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.firebase.performance)
     alias(libs.plugins.kotlinX.serialization)
+    id("kotlin-kapt")
 }
 
 android {
@@ -85,7 +86,7 @@ dependencies {
 
     // Dependency Injection
     implementation(libs.hilt.android)
-    annotationProcessor(libs.hilt.compiler)
+    kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
 
     // Navigation

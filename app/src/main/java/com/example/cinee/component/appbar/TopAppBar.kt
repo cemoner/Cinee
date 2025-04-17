@@ -28,7 +28,7 @@ import com.example.cinee.ui.theme.Shapes
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CineeTopAppBar(
-    title: String,
+    title: String? = null,
     modifier: Modifier = Modifier,
     navigationIcon: @Composable (() -> Unit) = {},
     actions: @Composable RowScope.() -> Unit = {},
@@ -43,12 +43,14 @@ fun CineeTopAppBar(
 ) {
     TopAppBar(
         title = {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleLarge,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
+            title?.let {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleLarge,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         },
         modifier = modifier,
         navigationIcon = navigationIcon,
