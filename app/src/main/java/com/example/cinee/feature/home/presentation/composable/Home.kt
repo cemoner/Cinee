@@ -1,14 +1,16 @@
 package com.example.cinee.feature.home.presentation.composable
 
 import androidx.compose.runtime.Composable
-import com.example.cinee.component.text.BodyText
-import com.example.cinee.component.text.HeaderText
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.cinee.feature.home.presentation.viewmodel.HomeViewModel
 
 @Composable
 fun HomeScreen(
     onMovieClick: (movieId:Int) -> Unit,
 ){
-    BodyText("Home")
+    val viewModel:HomeViewModel = hiltViewModel<HomeViewModel>()
+
+    HomeContent()
 }
 
 

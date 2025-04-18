@@ -50,6 +50,13 @@ android {
     }
 }
 
+
+
+
+
+
+
+
 dependencies {
     // Core Android
     implementation(libs.androidx.core.ktx)
@@ -123,4 +130,12 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // Jetpack Datastore
+    implementation (libs.androidx.datastore.preferences)
+    implementation (libs.androidx.datastore.preferences.rxjava2)
+    implementation (libs.androidx.datastore.preferences.rxjava3)
+    implementation (libs.androidx.datastore)
+    implementation (libs.androidx.datastore.rxjava2)
+    implementation (libs.androidx.datastore.rxjava3)
 }

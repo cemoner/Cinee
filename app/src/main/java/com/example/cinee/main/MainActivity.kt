@@ -1,9 +1,15 @@
 package com.example.cinee.main
 
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,6 +29,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.datastore.core.DataStore
+import androidx.datastore.dataStore
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
@@ -31,6 +40,8 @@ import com.example.cinee.component.appbar.BackNavigationIcon
 import com.example.cinee.component.appbar.CineeTopAppBar
 import com.example.cinee.component.appbar.CineeTopAppBarDefaults
 import com.example.cinee.component.text.BodyText
+import com.example.cinee.datastore.model.UserAccount
+import com.example.cinee.datastore.serializer.UserAccountSerializer
 import com.example.cinee.navigation.createGraph
 import com.example.cinee.navigation.model.BottomNavigationDestinations
 import com.example.cinee.navigation.model.Destination
@@ -38,6 +49,11 @@ import com.example.cinee.navigation.navigateTo
 import com.example.cinee.ui.theme.CineeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+
+val Context.dataStore: DataStore<UserAccount> by dataStore(
+    fileName = "user_account.pb",
+    serializer = UserAccountSerializer,
+)
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -77,7 +93,6 @@ fun AppContent() {
     val currentDestination = navBackStackEntry?.destination
 
 
-
     NavigationSuiteScaffold(
         navigationSuiteItems = {
             BottomNavigationDestinations.entries.forEach {
@@ -107,12 +122,20 @@ fun AppContent() {
                 when {
                     currentDestination?.hierarchy?.any {it.hasRoute(Destination.Home::class) } == true -> {
                         CineeTopAppBar(
-                            "Cinee",
-                            actions = {
+                            navigationIcon = {
                                 IconButton(onClick = {}) {
                                     Icon(
                                         imageVector = Icons.Default.Search,
                                         contentDescription = "Search",
+                                    )
+                                }
+                            },
+                            title = "Cinee",
+                            actions = {
+                                IconButton(onClick = {}) {
+                                    Icon(
+                                        imageVector = Icons.Default.Settings,
+                                        contentDescription = "Settings",
                                     )
                                 }
                             }
@@ -136,7 +159,11 @@ fun AppContent() {
         ) { innerPadding ->
             NavHost(navController = navController,
                 startDestination = Destination.HomeGraph,
-                modifier = Modifier.padding(innerPadding)
+                modifier = Modifier.padding(innerPadding),
+                enterTransition = { slideInHorizontally() },
+                exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Up, animationSpec = tween(100)) },
+                popEnterTransition = { EnterTransition.None },
+                popExitTransition = { ExitTransition.None }
             )
             {
                 createGraph(navController)
