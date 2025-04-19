@@ -89,6 +89,7 @@ dependencies {
     implementation(libs.androidx.ui.text.google.fonts)
     implementation(libs.androidx.material3.lint)
     implementation(libs.androidx.material.icons.extended)
+    implementation(libs.androidx.material3.window.size.class1.android)
     annotationProcessor(libs.room.compiler)
 
     // Dependency Injection
@@ -138,4 +139,7 @@ dependencies {
     implementation (libs.androidx.datastore)
     implementation (libs.androidx.datastore.rxjava2)
     implementation (libs.androidx.datastore.rxjava3)
+
+    // Splash Screen Api
+    implementation(libs.androidx.core.splashscreen)
 }
