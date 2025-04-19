@@ -8,13 +8,13 @@ import androidx.compose.material.icons.filled.WatchLater
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.cinee.R
 
-enum class BottomNavigationDestinations(
+enum class BottomNavigationItem(
     val destination: Destination,
     @StringRes val label: Int,
     val icon: ImageVector,
     @StringRes val contentDescription: Int
 ) {
-    HOME(Destination.HomeGraph,R.string.home, Icons.Default.Home, R.string.home),
-    WATCHLIST(Destination.WatchlistGraph,R.string.watchlist, Icons.Default.WatchLater, R.string.watchlist),
+    HOME(Destination.Home,R.string.home, Icons.Default.Home, R.string.home),
+    WATCHLIST(Destination.Watchlist,R.string.watchlist, Icons.Default.WatchLater, R.string.watchlist),
     PROFILE(Destination.ProfileGraph,R.string.profile, Icons.Default.AccountBox, R.string.profile),
 }

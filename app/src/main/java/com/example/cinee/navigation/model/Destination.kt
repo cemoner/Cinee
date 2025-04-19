@@ -3,9 +3,7 @@ package com.example.cinee.navigation.model
 import kotlinx.serialization.Serializable
 
 sealed class Destination {
-    // Home
-    @Serializable
-    object HomeGraph:Destination()
+
 
     @Serializable
     object Home : Destination()
@@ -15,10 +13,6 @@ sealed class Destination {
         val movieId: Int,
     ) : Destination()
 
-    // Watchlist
-
-    @Serializable
-    object WatchlistGraph : Destination()
 
     @Serializable
     object Watchlist : Destination()

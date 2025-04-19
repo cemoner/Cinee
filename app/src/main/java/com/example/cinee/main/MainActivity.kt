@@ -22,18 +22,18 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
@@ -42,11 +42,11 @@ import androidx.navigation.compose.rememberNavController
 import com.example.cinee.component.appbar.BackNavigationIcon
 import com.example.cinee.component.appbar.CineeTopAppBar
 import com.example.cinee.component.appbar.CineeTopAppBarDefaults
-import com.example.cinee.component.text.BodyText
+import com.example.cinee.component.navigation.CustomNavigationBar
 import com.example.cinee.datastore.model.UserAccount
 import com.example.cinee.datastore.serializer.UserAccountSerializer
 import com.example.cinee.navigation.createGraph
-import com.example.cinee.navigation.model.BottomNavigationDestinations
+import com.example.cinee.navigation.model.BottomNavigationItem
 import com.example.cinee.navigation.model.Destination
 import com.example.cinee.navigation.navigateTo
 import com.example.cinee.ui.theme.CineeTheme
@@ -99,41 +99,8 @@ fun AppContent(
     val currentDestination = navBackStackEntry?.destination
     val isLoggedIn by mainViewModel.isLoggedIn.collectAsStateWithLifecycle()
 
-
-    NavigationSuiteScaffold(
-        navigationSuiteItems = {
-            BottomNavigationDestinations.entries.forEach {
-                item(
-                    icon = {
-                        Icon(
-                            it.icon,
-                            contentDescription = stringResource(it.contentDescription)
-                        )
-                    },
-                    label = { BodyText( text = stringResource(it.label),style = MaterialTheme.typography.labelSmall) },
-                    selected = currentDestination?.hierarchy?.any { it1-> it1.hasRoute(it.destination::class) } == true,
-                    onClick = {
-                        if(it == BottomNavigationDestinations.PROFILE && !isLoggedIn) {
-                                navigateTo(
-                                    navController = navController,
-                                    destination = Destination.AuthenticationGraph
-                                )
-                        }
-                        else {
-                            navigateTo(
-                                navController = navController,
-                                destination = it.destination
-                            )
-                        }
-                    }
-                )
-            }
-        },
-        modifier = Modifier.fillMaxSize().systemBarsPadding()
-
-    ){
-        Scaffold(
-            topBar = {
+    Scaffold(
+        topBar = {
                 when {
                     currentDestination?.hierarchy?.any {it.hasRoute(Destination.Home::class) } == true -> {
                         CineeTopAppBar(
@@ -156,7 +123,7 @@ fun AppContent(
                             }
                         )
                     }
-                    currentDestination?.hierarchy?.any {it.hasRoute(Destination.SignIn::class) || it.hasRoute(Destination.Profile::class)} == true -> {
+                    checkHasRoute(currentDestination,Destination.SignIn) || checkHasRoute(currentDestination,Destination.Profile) -> {
                         // No Top Bar
                     }
                     else -> {
@@ -169,20 +136,56 @@ fun AppContent(
                         )
                     }
                 }
-            }
-
-        ) { innerPadding ->
-            NavHost(navController = navController,
-                startDestination = Destination.HomeGraph,
-                modifier = Modifier.padding(innerPadding),
-                enterTransition = { slideInHorizontally() },
-                exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Up, animationSpec = tween(100)) },
-                popEnterTransition = { EnterTransition.None },
-                popExitTransition = { ExitTransition.None }
-            )
-            {
-                createGraph(navController)
+            },
+        bottomBar = {
+            if(shouldShowBottomBar(currentDestination)){
+                CustomNavigationBar(
+                    items = BottomNavigationItem.entries,
+                    isLoggedIn = isLoggedIn,
+                    checkHasRoute = ::checkHasRoute,
+                    currentDestination = currentDestination,
+                    onSelectedItemNavigation = { destination ->
+                        navigateTo(
+                            navController = navController,
+                            destination = destination
+                        )
+                    }
+                )
             }
         }
+    ) { innerPadding ->
+        NavHost(navController = navController,
+            startDestination = Destination.Home,
+            modifier = Modifier.padding(innerPadding),
+            enterTransition = { slideInHorizontally() },
+            exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Up, animationSpec = tween(100)) },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
+        )
+        {
+                createGraph(navController)
+        }
     }
+
+}
+
+private fun checkHasRoute(currentDestination:NavDestination?,destination: Destination):Boolean{
+    return try {
+        currentDestination?.hierarchy?.any { it.hasRoute(destination::class) } == true
+    }catch (e:NullPointerException) {
+        e.printStackTrace()
+        return false
+    }
+}
+
+private fun shouldShowBottomBar(currentDestination: NavDestination?): Boolean {
+    val bottomBarDestinations = setOf(
+        Destination.Home::class,
+        Destination.Watchlist::class,
+        Destination.Profile::class
+    )
+
+    return currentDestination?.hierarchy?.any { destination ->
+        bottomBarDestinations.any { destination.hasRoute(it) }
+    } == true
 }
