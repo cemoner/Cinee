@@ -18,30 +18,29 @@ fun NavGraphBuilder.createGraph(
     navController: NavHostController,
 
 ){
-    navigation<Destination.HomeGraph>(startDestination = Destination.Home){
-        composable<Destination.Home>{
-            HomeScreen(
-                onMovieClick = { movieId ->
-                    navigateTo(
-                        navController = navController,
-                        destination = Destination.MovieDetails(movieId))
-                }
-            )
-        }
 
-        composable<Destination.MovieDetails>{ backStackEntry ->
-            val movie = backStackEntry.toRoute<Destination.MovieDetails>()
-            MovieDetailsScreen(
-                movie.movieId,
-                onBackClick = { popBackStack(navController) }
-            )
-        }
+    composable<Destination.Home> {
+        HomeScreen(
+            navigateToMovieDetailsScreen = { movieId ->
+                navigateTo(
+                    navController = navController,
+                    destination = Destination.MovieDetails(movieId)
+                )
+            }
+        )
+    }
+    composable<Destination.MovieDetails>{ backStackEntry ->
+        val movie = backStackEntry.toRoute<Destination.MovieDetails>()
+        MovieDetailsScreen(
+            movie.movieId,
+            navigateBack = { popBackStack(navController) }
+        )
     }
 
     navigation<Destination.ProfileGraph>(startDestination = Destination.Profile){
         composable<Destination.Profile>{
             ProfileScreen(
-                onLogoutClick = {
+                navigateToSignInScreen = {
                     navigateTo(
                         navController = navController,
                         destination = Destination.AuthenticationGraph,
@@ -53,39 +52,49 @@ fun NavGraphBuilder.createGraph(
         }
     }
 
-    navigation<Destination.WatchlistGraph>(startDestination = Destination.Watchlist){
-        composable<Destination.Watchlist>{
-            WatchlistScreen(
-                onMovieClick = { movieId ->
-                    navigateTo(
-                        navController = navController,
-                        destination = Destination.MovieDetails(movieId))
-                }
-            )
-        }
-
+    composable<Destination.Watchlist>{
+        WatchlistScreen(
+            onMovieClick = { movieId ->
+                navigateTo(
+                    navController = navController,
+                    destination = Destination.MovieDetails(movieId))
+            }
+        )
     }
+
     navigation<Destination.AuthenticationGraph>(startDestination = Destination.SignIn){
         composable<Destination.SignIn>{
             SignInScreen(
-                onSignUpClick = { navigateTo(
-                    navController = navController,
-                    destination = Destination.SignUp) },
+                navigateToSignUpScreen = {
+                    navigateTo(
+                        navController = navController,
+                        destination = Destination.SignUp
+                    )
+                    },
 
-                onForgotPasswordClick = { navigateTo(
-                    navController = navController,
-                    destination = Destination.ForgotPassword) },
+                navigateToForgotPasswordScreen = {
+                    navigateTo(
+                        navController = navController,
+                        destination = Destination.ForgotPassword
+                    )
+                    },
 
-                onSignInClick = { navigateTo(
-                    navController = navController,
-                    destination = Destination.HomeGraph) }
+                navigateToProfileScreen = {
+                    navigateTo(
+                        navController = navController,
+                        destination = Destination.ProfileGraph,
+                        popUpTo = Destination.AuthenticationGraph,
+                        inclusive = true
+                    )
+                }
             )
         }
         composable<Destination.SignUp>{
             SignUpScreen(){
                 navigateTo(
                     navController = navController,
-                    destination = Destination.SignIn)
+                    destination = Destination.SignIn
+                )
             }
         }
 
@@ -93,7 +102,8 @@ fun NavGraphBuilder.createGraph(
             ForgotPasswordScreen(){
                 navigateTo(
                     navController = navController,
-                    destination = Destination.SignIn)
+                    destination = Destination.SignIn
+                )
             }
         }
     }

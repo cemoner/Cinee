@@ -3,7 +3,7 @@ package com.example.cinee.feature.auth.presentation.composable
 import androidx.compose.runtime.Composable
 
 @Composable
-fun ForgotPasswordScreen(navigateToSignIn: () -> Unit) {
+fun ForgotPasswordScreen(navigateToSignInScreen: () -> Unit) {
 
 }
 

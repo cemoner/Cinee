@@ -3,7 +3,7 @@ package com.example.cinee.feature.auth.presentation.composable
 import androidx.compose.runtime.Composable
 
 @Composable
-fun SignUpScreen(navigateToSignIn: () -> Unit) {
+fun SignUpScreen(navigateToSignInScreen: () -> Unit) {
 
 }
 

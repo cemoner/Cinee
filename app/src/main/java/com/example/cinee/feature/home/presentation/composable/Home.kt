@@ -6,7 +6,7 @@ import com.example.cinee.feature.home.presentation.viewmodel.HomeViewModel
 
 @Composable
 fun HomeScreen(
-    onMovieClick: (movieId:Int) -> Unit,
+    navigateToMovieDetailsScreen: (movieId:Int) -> Unit,
 ){
     val viewModel:HomeViewModel = hiltViewModel<HomeViewModel>()
 

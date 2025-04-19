@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 @Composable
 fun MovieDetailsScreen(
     movieId: Int,
-    onBackClick: () -> Unit,
+    navigateBack: () -> Unit,
 ){
 
 }

@@ -26,11 +26,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
@@ -74,6 +77,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun AppScreen(modifier: Modifier = Modifier) {
+    val mainViewModel = hiltViewModel<MainViewModel>()
     Box(
         modifier =
             Modifier
@@ -81,16 +85,19 @@ fun AppScreen(modifier: Modifier = Modifier) {
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.background),
     ) {
-        AppContent()
+        AppContent(mainViewModel)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AppContent() {
+fun AppContent(
+    mainViewModel: MainViewModel
+) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+    val isLoggedIn by mainViewModel.isLoggedIn.collectAsStateWithLifecycle()
 
 
     NavigationSuiteScaffold(
@@ -106,10 +113,18 @@ fun AppContent() {
                     label = { BodyText( text = stringResource(it.label),style = MaterialTheme.typography.labelSmall) },
                     selected = currentDestination?.hierarchy?.any { it1-> it1.hasRoute(it.destination::class) } == true,
                     onClick = {
-                        navigateTo(
-                            navController = navController,
-                            destination = it.destination
-                        )
+                        if(it == BottomNavigationDestinations.PROFILE && !isLoggedIn) {
+                                navigateTo(
+                                    navController = navController,
+                                    destination = Destination.AuthenticationGraph
+                                )
+                        }
+                        else {
+                            navigateTo(
+                                navController = navController,
+                                destination = it.destination
+                            )
+                        }
                     }
                 )
             }

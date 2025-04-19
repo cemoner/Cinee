@@ -5,7 +5,7 @@ import com.example.cinee.component.text.HeaderText
 
 @Composable
 fun ProfileScreen(
-    onLogoutClick: () -> Unit,
+    navigateToSignInScreen: () -> Unit,
 ){
     HeaderText("Profile")
 }
