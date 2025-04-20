@@ -42,8 +42,16 @@ fun CustomTextField(
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = MaterialTheme.colorScheme.primary,
             unfocusedBorderColor = MaterialTheme.colorScheme.outline,
-            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            focusedTextColor = MaterialTheme.colorScheme.onBackground,
             unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+            cursorColor = MaterialTheme.colorScheme.primary,
+            errorCursorColor = MaterialTheme.colorScheme.error,
+            errorBorderColor = MaterialTheme.colorScheme.error,
+            errorTextColor = MaterialTheme.colorScheme.error,
+            errorSupportingTextColor = MaterialTheme.colorScheme.error,
+            unfocusedSupportingTextColor = MaterialTheme.colorScheme.onBackground,
+            focusedSupportingTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+
         ),
         trailingIcon = trailingIcon
     )
