@@ -2,15 +2,10 @@ package com.example.cinee.component.input
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
@@ -20,14 +15,15 @@ import androidx.compose.ui.tooling.preview.PreviewLightDark
 import com.example.cinee.ui.theme.CineeTheme
 
 @Composable
-fun UsernameTextField(
+fun CustomTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     labelText: String = "Username",
     enabled: Boolean = true,
     isError: Boolean = false,
-    supportingText: String? = null
+    supportingText: String? = null,
+    trailingIcon: @Composable (() -> Unit)? = null
 ) {
     TextField(
         value = value,
@@ -49,12 +45,7 @@ fun UsernameTextField(
             focusedTextColor = MaterialTheme.colorScheme.onSurface,
             unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
         ),
-        trailingIcon = {
-            Icon(
-            imageVector = Icons.Filled.Person,
-            contentDescription = "Person"
-            )
-        }
+        trailingIcon = trailingIcon
     )
 }
 
@@ -63,7 +54,7 @@ fun UsernameTextField(
 @Composable
 fun UsernameTextFieldPreview() {
     CineeTheme {
-        UsernameTextField(
+        CustomTextField(
             value = "johndoe",
             onValueChange = {},
             supportingText = "Enter your username"

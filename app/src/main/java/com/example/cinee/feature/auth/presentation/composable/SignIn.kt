@@ -4,29 +4,30 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.Dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.cinee.R
 import com.example.cinee.component.button.CustomIconButton
 import com.example.cinee.component.button.PrimaryButton
+import com.example.cinee.component.input.CustomTextField
 import com.example.cinee.component.input.PasswordTextField
-import com.example.cinee.component.input.UsernameTextField
+import com.example.cinee.component.spacer.ShortcutSpacer
 import com.example.cinee.component.text.BodyText
 import com.example.cinee.component.text.ClickableText
 import com.example.cinee.component.text.HeaderText
-import com.example.cinee.feature.auth.presentation.contract.SignInContract.UiState
-import com.example.cinee.feature.auth.presentation.contract.SignInContract.UiAction
 import com.example.cinee.feature.auth.presentation.contract.SignInContract.SideEffect
+import com.example.cinee.feature.auth.presentation.contract.SignInContract.UiAction
+import com.example.cinee.feature.auth.presentation.contract.SignInContract.UiState
 import com.example.cinee.feature.auth.presentation.viewmodel.SignInViewModel
 import com.example.cinee.mvi.CollectSideEffect
 import com.example.cinee.mvi.unpack
@@ -90,13 +91,20 @@ fun SignInContent(
                     maxLines = 1,
                 )
                 ShortcutSpacer(Dimens.paddingLarge)
-                UsernameTextField(
+                CustomTextField(
                     value = uiState.email,
                     onValueChange = { onAction(UiAction.ChangeEmail(it)) },
                     labelText = "Email",
                     supportingText = "Enter your email",
                     enabled = uiState.isInputEnabled,
                     isError = false,
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Filled.Person,
+                            contentDescription = "Person"
+                        )
+                    }
+
                 )
                 ShortcutSpacer(Dimens.paddingMedium)
                 PasswordTextField(
@@ -162,7 +170,3 @@ fun SignInContent(
     }
 }
 
-@Composable
-fun ShortcutSpacer(padding:Dp){
-    Spacer(modifier = Modifier.height(padding))
-}

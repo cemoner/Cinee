@@ -28,7 +28,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
@@ -50,6 +49,7 @@ import com.example.cinee.navigation.createGraph
 import com.example.cinee.navigation.model.BottomNavigationItem
 import com.example.cinee.navigation.model.Destination
 import com.example.cinee.navigation.navigateTo
+import com.example.cinee.navigation.popBackStack
 import com.example.cinee.ui.theme.CineeTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -137,7 +137,7 @@ fun AppContent(
                         CineeTopAppBar(
                             navigationIcon = {
                                 CineeTopAppBarDefaults.BackNavigationIcon(
-                                    onClick = {},
+                                    onClick = { popBackStack(navController) },
                                 )
                             }
                         )

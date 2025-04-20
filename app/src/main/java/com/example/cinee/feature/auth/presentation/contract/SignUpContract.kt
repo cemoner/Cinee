@@ -6,7 +6,6 @@ interface SignUpContract {
     sealed interface UiState {
         data class Success(
             val name: String,
-            val surname: String,
             val email: String,
             val password: String,
             val confirmPassword: String,
@@ -19,7 +18,6 @@ interface SignUpContract {
 
     sealed interface UiAction {
         data class ChangeName(val name: String) : UiAction
-        data class ChangeSurname(val surname: String) : UiAction
         data class ChangeEmail(val email: String) : UiAction
         data class ChangePassword(val password: String) : UiAction
         data class ChangeConfirmPassword(val confirmPassword: String) : UiAction

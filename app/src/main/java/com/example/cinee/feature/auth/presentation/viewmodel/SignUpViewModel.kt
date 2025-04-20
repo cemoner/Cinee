@@ -16,10 +16,20 @@ class SignUpViewModel @Inject constructor(
 )
     : ViewModel(),MVI<UiState, UiAction,SideEffect> by mvi(initialUiState()) {
 
+        init {
+            updateUiState(
+                newUiState = UiState.Success(
+                    name = "",
+                    email = "",
+                    password = "",
+                    confirmPassword = "",
+                    isInputEnabled = true
+                )
+            )
+        }
     override fun onAction(uiAction: UiAction) {
         when (uiAction) {
             is UiAction.ChangeName -> changeName(uiAction.name)
-            is UiAction.ChangeSurname -> changeSurname(uiAction.surname)
             is UiAction.ChangeEmail -> changeEmail(uiAction.email)
             is UiAction.ChangePassword -> changePassword(uiAction.password)
             is UiAction.ChangeConfirmPassword -> changeConfirmPassword(uiAction.confirmPassword)
@@ -30,11 +40,6 @@ class SignUpViewModel @Inject constructor(
     fun changeName(name: String) {
         val uiState = uiState.value as UiState.Success
         updateUiState(newUiState = uiState.copy(name = name))
-    }
-
-    fun changeSurname(surname: String) {
-        val uiState = uiState.value as UiState.Success
-        updateUiState(newUiState = uiState.copy(surname = surname))
     }
 
     fun changeEmail(email: String) {
