@@ -1,8 +1,10 @@
 package com.example.cinee.component.navigation
 
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,12 +32,12 @@ fun CustomNavigationBar(
     modifier: Modifier = Modifier
 ) {
     NavigationBar(
-        modifier = modifier
+        modifier = modifier,
     ) {
         items.forEach { item ->
             NavigationBarItem(
                 icon = { Icon(item.icon, contentDescription = stringResource (item.label)) },
-                label = { Text(stringResource(item.label)) },
+                label = { Text(stringResource(item.label),style = MaterialTheme.typography.labelSmall) },
                 selected = checkHasRoute(currentDestination, item.destination),
                 onClick = {
                     if (item.destination == Destination.ProfileGraph && !isLoggedIn) {
@@ -44,6 +46,7 @@ fun CustomNavigationBar(
                         onSelectedItemNavigation(item.destination)
                     }
                 }
+                ,
             )
         }
     }

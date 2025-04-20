@@ -9,7 +9,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,7 +38,7 @@ fun PasswordTextField(
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
 
-    OutlinedTextField(
+    TextField(
         value = value,
         onValueChange = onValueChange,
         modifier = modifier.fillMaxWidth(),
@@ -60,16 +62,22 @@ fun PasswordTextField(
             ) {
                 Icon(
                     imageVector = if (passwordVisible) 
-                        Icons.Filled.VisibilityOff
+                        Icons.Filled.Visibility
                     else 
-                        Icons.Filled.Visibility,
+                        Icons.Filled.VisibilityOff,
                     contentDescription = if (passwordVisible) 
                         "Hide password" 
                     else 
                         "Show password"
                 )
             }
-        }
+        },
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+            unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+            focusedTextColor = MaterialTheme.colorScheme.onSurface,
+            unfocusedTextColor = MaterialTheme.colorScheme.onSurface,
+        )
     )
 }
 

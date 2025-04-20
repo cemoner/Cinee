@@ -37,7 +37,8 @@ class MVIDelegate<UiState,UiAction,SideEffect> internal constructor(
         this.launch { _sideEffect.send(effect) }
     }
 
-    fun <UiState,UiAction,SideEffect> mvi(
-        initialUiState: UiState
-    ): MVIDelegate<UiState,UiAction,SideEffect> = MVIDelegate(initialUiState)
+
 }
+fun <UiState,UiAction,SideEffect> mvi(
+    initialUiState: UiState
+): MVIDelegate<UiState,UiAction,SideEffect> = MVIDelegate(initialUiState)

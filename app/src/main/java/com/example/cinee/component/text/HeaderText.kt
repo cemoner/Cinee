@@ -19,10 +19,10 @@ fun HeaderText(
     text: String,
     modifier: Modifier = Modifier,
     color: Color? = null,
-    textAlign: TextAlign = TextAlign.Start,
+    textAlign: TextAlign = TextAlign.Center,
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Clip,
-    style: TextStyle = MaterialTheme.typography.headlineMedium
+    style: TextStyle = MaterialTheme.typography.titleMedium
 ) {
     Text(
         text = text,
