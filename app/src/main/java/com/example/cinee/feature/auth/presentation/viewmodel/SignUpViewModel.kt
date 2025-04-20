@@ -2,7 +2,6 @@ package com.example.cinee.feature.auth.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cinee.feature.auth.presentation.contract.SignInContract
 import com.example.cinee.feature.auth.presentation.contract.SignUpContract.UiAction
 import com.example.cinee.feature.auth.presentation.contract.SignUpContract.SideEffect
 import com.example.cinee.feature.auth.presentation.contract.SignUpContract.UiState
