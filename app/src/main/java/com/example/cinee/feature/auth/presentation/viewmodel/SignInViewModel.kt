@@ -60,7 +60,6 @@ class SignInViewModel
     }
 
     fun submit() {
-        val uiState = uiState.value as UiState.Success
         emitSideEffect(SideEffect.NavigateToHomeScreen(destination = Destination.ProfileGraph))
     }
 

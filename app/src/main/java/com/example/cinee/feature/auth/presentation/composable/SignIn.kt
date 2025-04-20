@@ -28,6 +28,7 @@ import com.example.cinee.feature.auth.presentation.contract.SignInContract.UiSta
 import com.example.cinee.feature.auth.presentation.contract.SignInContract.UiAction
 import com.example.cinee.feature.auth.presentation.contract.SignInContract.SideEffect
 import com.example.cinee.feature.auth.presentation.viewmodel.SignInViewModel
+import com.example.cinee.mvi.CollectSideEffect
 import com.example.cinee.mvi.unpack
 import com.example.cinee.ui.theme.Dimens
 import kotlinx.coroutines.flow.Flow
@@ -60,6 +61,11 @@ fun SignInContent(
     navigateToForgotPasswordScreen: () -> Unit,
     navigateToProfileScreen: () -> Unit
 ) {
+    CollectSideEffect(sideEffect) {
+        when (it) {
+            is SideEffect.NavigateToHomeScreen -> navigateToProfileScreen()
+        }
+    }
     when(uiState){
         is UiState.Error -> {}
         is UiState.Loading -> {}
