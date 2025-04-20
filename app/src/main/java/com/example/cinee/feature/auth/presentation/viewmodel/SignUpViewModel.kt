@@ -19,12 +19,12 @@ class SignUpViewModel @Inject constructor(
 
     override fun onAction(uiAction: UiAction) {
         when (uiAction) {
-            is UiAction.ChangeConfirmPassword -> TODO()
-            is UiAction.ChangeEmail -> TODO()
-            is UiAction.ChangeName -> TODO()
-            is UiAction.ChangePassword -> TODO()
-            is UiAction.ChangeSurname -> TODO()
-            is UiAction.Submit -> TODO()
+            is UiAction.ChangeName -> changeName(uiAction.name)
+            is UiAction.ChangeSurname -> changeSurname(uiAction.surname)
+            is UiAction.ChangeEmail -> changeEmail(uiAction.email)
+            is UiAction.ChangePassword -> changePassword(uiAction.password)
+            is UiAction.ChangeConfirmPassword -> changeConfirmPassword(uiAction.confirmPassword)
+            is UiAction.Submit -> submit()
         }
     }
 
