@@ -8,9 +8,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.cinee.component.button.PrimaryButton
 import com.example.cinee.component.dialog.CustomAlertDialog
 import com.example.cinee.component.input.CustomTextField
@@ -46,6 +46,8 @@ fun ForgotPasswordContent(
     navigateToSignInScreen: () -> Unit
 ) {
 
+    val focusManager = LocalFocusManager.current
+
     CollectSideEffect(sideEffect) {
         when (it) {
             is SideEffect.NavigateToSignInScreen -> navigateToSignInScreen()
@@ -78,16 +80,25 @@ fun ForgotPasswordContent(
                 ShortcutSpacer(Dimens.paddingLarge)
                 CustomTextField(
                     value = uiState.email,
-                    onValueChange = { onAction(UiAction.ChangeEmail(it)) },
+                    onValueChange =
+                        {
+                            onAction(UiAction.ChangeEmail(it))
+                            if (uiState.emailError != null) {
+                                onAction(UiAction.ClearEmailError)
+                            }
+                        },
                     labelText = "Email",
                     supportingText = "Enter your email",
-                    enabled = uiState.isInputEnabled,
-                    isError = false,
+                    isError = uiState.emailError != null,
+                    errorMessage = uiState.emailError
                 )
                 ShortcutSpacer(Dimens.paddingLarge)
                 PrimaryButton(
                     text = "Submit",
-                    onClick = { onAction(UiAction.Submit) },
+                    onClick = {
+                        focusManager.clearFocus()
+                        onAction(UiAction.Submit)
+                              },
                     enabled = uiState.isInputEnabled
                 )
                 CustomAlertDialog(

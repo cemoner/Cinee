@@ -7,13 +7,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.cinee.R
@@ -62,9 +60,12 @@ fun SignInContent(
     navigateToForgotPasswordScreen: () -> Unit,
     navigateToProfileScreen: () -> Unit
 ) {
+
+    val focusManager = LocalFocusManager.current
+
     CollectSideEffect(sideEffect) {
         when (it) {
-            is SideEffect.NavigateToHomeScreen -> navigateToProfileScreen()
+            is SideEffect.NavigateToProfileScreen -> navigateToProfileScreen()
         }
     }
     when(uiState){
@@ -93,23 +94,25 @@ fun SignInContent(
                 ShortcutSpacer(Dimens.paddingLarge)
                 CustomTextField(
                     value = uiState.email,
-                    onValueChange = { onAction(UiAction.ChangeEmail(it)) },
+                    onValueChange =
+                        {
+                            onAction(UiAction.ChangeEmail(it))
+                            if (uiState.emailError != null) {
+                                onAction(UiAction.ClearEmailError)
+                            }
+                        },
                     labelText = "Email",
                     supportingText = "Enter your email",
-                    enabled = uiState.isInputEnabled,
-                    isError = false,
-                    trailingIcon = {
-                        Icon(
-                            imageVector = Icons.Filled.Person,
-                            contentDescription = "Person"
-                        )
-                    }
-
+                    isError = uiState.emailError != null,
+                    errorMessage = uiState.emailError
                 )
                 ShortcutSpacer(Dimens.paddingMedium)
                 PasswordTextField(
                     value = uiState.password,
-                    onValueChange = { onAction(UiAction.ChangePassword(it)) },
+                    onValueChange =
+                        {
+                            onAction(UiAction.ChangePassword(it))
+                        },
                     labelText = "Password",
                     supportingText = "Enter your password",
                     enabled = uiState.isInputEnabled,
@@ -129,7 +132,10 @@ fun SignInContent(
                 ShortcutSpacer(Dimens.paddingLarge)
                 PrimaryButton(
                     text = "Sign In",
-                    onClick = { onAction(UiAction.Submit) },
+                    onClick = {
+                        focusManager.clearFocus()
+                        onAction(UiAction.Submit)
+                              },
                     enabled = uiState.isInputEnabled,
                 )
                 ShortcutSpacer(Dimens.paddingLarge)

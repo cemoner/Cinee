@@ -1,6 +1,5 @@
 package com.example.cinee.feature.auth.presentation.contract
 
-import com.example.cinee.navigation.model.Destination
 
 interface SignUpContract {
     sealed interface UiState {
@@ -9,6 +8,9 @@ interface SignUpContract {
             val email: String,
             val password: String,
             val confirmPassword: String,
+            val emailError: String? = null,
+            val passwordError: String? = null,
+            val confirmPasswordError: String? = null,
             val isInputEnabled: Boolean,
         ) : UiState
 
@@ -21,10 +23,13 @@ interface SignUpContract {
         data class ChangeEmail(val email: String) : UiAction
         data class ChangePassword(val password: String) : UiAction
         data class ChangeConfirmPassword(val confirmPassword: String) : UiAction
+        object ClearEmailError : UiAction
+        object ClearPasswordError : UiAction
+        object ClearConfirmPasswordError : UiAction
         object Submit : UiAction
     }
 
     sealed interface SideEffect {
-        data class NavigateToLoginScreen(val destination: Destination) : SideEffect
+        object NavigateToSignInScreen : SideEffect
     }
 }

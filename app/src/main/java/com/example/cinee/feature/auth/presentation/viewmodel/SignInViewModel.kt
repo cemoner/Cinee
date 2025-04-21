@@ -10,7 +10,8 @@ import com.example.cinee.mvi.mvi
 import com.example.cinee.feature.auth.presentation.contract.SignInContract.UiAction
 import com.example.cinee.feature.auth.presentation.contract.SignInContract.UiState
 import com.example.cinee.feature.auth.presentation.contract.SignInContract.SideEffect
-import com.example.cinee.navigation.model.Destination
+import com.example.cinee.feature.auth.presentation.model.FieldType
+import com.example.cinee.feature.auth.presentation.validateForm
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,7 +27,6 @@ class SignInViewModel
                 newUiState = UiState.Success(
                     email = "",
                     password = "",
-                    rememberMe = false,
                     isInputEnabled = true
                 )
             )
@@ -37,10 +37,10 @@ class SignInViewModel
         when(uiAction){
             is UiAction.ChangeEmail -> changeEmail(uiAction.email)
             is UiAction.ChangePassword -> changePassword(uiAction.password)
-            is UiAction.ChangeRememberMe -> changeRememberMe(uiAction.rememberMe)
             is UiAction.Submit -> submit()
             is UiAction.SignInWithGoogle -> signInWithGoogle()
             is UiAction.SignInWithFacebook -> signInWithFacebook()
+            is UiAction.ClearEmailError -> clearEmailError()
         }
     }
 
@@ -54,13 +54,20 @@ class SignInViewModel
         updateUiState(newUiState = uiState.copy(password = password))
     }
 
-    fun changeRememberMe(rememberMe: Boolean) {
-        val uiState = uiState.value as UiState.Success
-        updateUiState(newUiState = uiState.copy(rememberMe = rememberMe))
-    }
-
     fun submit() {
-        emitSideEffect(SideEffect.NavigateToHomeScreen(destination = Destination.ProfileGraph))
+        val currentState = uiState.value as UiState.Success
+        val errors = validateForm(
+            email = currentState.email,
+        )
+
+        if (errors.isEmpty()) {
+            // Proceed with registration
+            emitSideEffect(SideEffect.NavigateToProfileScreen)
+        } else {
+            updateUiState(currentState.copy(
+                emailError = errors[FieldType.EMAIL],
+            ))
+        }
     }
 
     fun emitSideEffect(effect: SideEffect) {
@@ -72,6 +79,12 @@ class SignInViewModel
 
     fun signInWithFacebook() {
     }
+
+    private fun clearEmailError() {
+        val currentState = uiState.value as UiState.Success
+        updateUiState(currentState.copy(emailError = null))
+    }
+
 }
 
 private fun initialUiState():UiState = UiState.Loading

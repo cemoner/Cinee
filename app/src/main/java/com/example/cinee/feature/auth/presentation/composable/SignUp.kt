@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.cinee.component.button.PrimaryButton
 import com.example.cinee.component.input.CustomTextField
@@ -40,12 +41,16 @@ fun SignUpContent(
     sideEffect: Flow<SideEffect>,
     navigateToSignInScreen: () -> Unit
 ) {
+    val focusManager = LocalFocusManager.current
+
 
     CollectSideEffect(sideEffect) {
         when (it) {
-            is SideEffect.NavigateToLoginScreen -> navigateToSignInScreen()
+            is SideEffect.NavigateToSignInScreen -> navigateToSignInScreen()
         }
     }
+
+
 
     when(uiState) {
         is UiState.Error -> TODO()
@@ -80,32 +85,55 @@ fun SignUpContent(
                 ShortcutSpacer(Dimens.paddingMedium)
                 CustomTextField(
                     value = uiState.email,
-                    onValueChange = { onAction(UiAction.ChangeEmail(it)) },
+                    onValueChange =
+                        {
+                        onAction(UiAction.ChangeEmail(it))
+                            if (uiState.emailError != null) {
+                                onAction(UiAction.ClearEmailError)
+                            }
+                        },
                     labelText = "Email",
                     supportingText = "Enter your email",
+                    isError = uiState.emailError != null,
+                    errorMessage = uiState.emailError
                 )
                 ShortcutSpacer(Dimens.paddingMedium)
                 PasswordTextField(
                     value = uiState.password,
-                    onValueChange = { onAction(UiAction.ChangePassword(it)) },
+                    onValueChange =
+                        {
+                        onAction(UiAction.ChangePassword(it))
+                            if (uiState.passwordError != null) {
+                                onAction(UiAction.ClearPasswordError)
+                            }
+                        },
                     labelText = "Password",
                     supportingText = "Enter your password",
                     enabled = uiState.isInputEnabled,
-                    isError = false,
+                    isError = uiState.passwordError != null,
+                    errorMessage = uiState.passwordError,
                 )
                 ShortcutSpacer(Dimens.paddingMedium)
                 PasswordTextField(
                     value = uiState.confirmPassword,
-                    onValueChange = { onAction(UiAction.ChangeConfirmPassword(it)) },
+                    onValueChange =
+                        { onAction(UiAction.ChangeConfirmPassword(it))
+                            if (uiState.passwordError != null) {
+                                onAction(UiAction.ClearConfirmPasswordError) }
+                        },
                     labelText = "Confirm Password",
                     supportingText = "Confirm your password",
                     enabled = uiState.isInputEnabled,
-                    isError = false,
+                    isError = uiState.confirmPasswordError != null,
+                    errorMessage = uiState.confirmPasswordError
                 )
                 ShortcutSpacer(Dimens.paddingLarge)
                 PrimaryButton(
                     text = "Sign In",
-                    onClick = { onAction(UiAction.Submit) },
+                    onClick = {
+                        focusManager.clearFocus()
+                        onAction(UiAction.Submit)
+                              },
                     enabled = uiState.isInputEnabled,
                 )
                 ShortcutSpacer(Dimens.paddingLarge)

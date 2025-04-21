@@ -7,7 +7,7 @@ interface SignInContract {
         data class Success(
             val email: String,
             val password: String,
-            val rememberMe: Boolean,
+            val emailError: String? = null,
             val isInputEnabled: Boolean
         ):UiState
         data class Error(val message: String):UiState
@@ -16,13 +16,13 @@ interface SignInContract {
     sealed interface UiAction {
         data class ChangeEmail(val email: String) : UiAction
         data class ChangePassword(val password: String) : UiAction
-        data class ChangeRememberMe(val rememberMe: Boolean) : UiAction
+        object ClearEmailError : UiAction
         object Submit : UiAction
         object SignInWithGoogle : UiAction
         object SignInWithFacebook : UiAction
     }
 
     sealed interface SideEffect {
-        data class NavigateToHomeScreen(val destination: Destination) : SideEffect
+        object NavigateToProfileScreen : SideEffect
     }
 }

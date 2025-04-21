@@ -32,9 +32,11 @@ fun PasswordTextField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     labelText: String = "Password",
+    supportingText: String = "Enter your password",
     enabled: Boolean = true,
     isError: Boolean = false,
-    supportingText: String? = null
+    errorMessage: String? = null,
+
 ) {
     var passwordVisible by remember { mutableStateOf(false) }
 
@@ -45,7 +47,12 @@ fun PasswordTextField(
         label = { Text(labelText) },
         enabled = enabled,
         isError = isError,
-        supportingText = if (supportingText != null) { { Text(supportingText) } } else null,
+        supportingText = {
+            Text(
+                text = errorMessage ?: supportingText,
+                color = if (isError) MaterialTheme.colorScheme.error
+                        else MaterialTheme.colorScheme.onSurfaceVariant
+        )},
         singleLine = true,
         shape = MaterialTheme.shapes.medium,
         visualTransformation = if (passwordVisible) 

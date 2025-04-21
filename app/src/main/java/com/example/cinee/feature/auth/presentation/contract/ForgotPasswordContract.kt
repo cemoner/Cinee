@@ -5,6 +5,7 @@ interface ForgotPasswordContract {
         object Loading : UiState()
         data class Success(
             val email: String,
+            val emailError: String? = null,
             val isInputEnabled: Boolean,
             val showDialog: Boolean
         ) : UiState()
@@ -12,6 +13,7 @@ interface ForgotPasswordContract {
     }
     sealed class UiAction {
         data class ChangeEmail(val email: String) : UiAction()
+        object ClearEmailError : UiAction()
         object CloseDialog : UiAction()
         object Submit : UiAction()
     }
