@@ -31,12 +31,12 @@ class ForgotPasswordViewModel
         }
     }
 
-    fun changeEmail(email: String) {
+    private fun changeEmail(email: String) {
         val uiState = uiState.value as UiState.Success
         updateUiState(newUiState = uiState.copy(email = email))
     }
 
-    fun submit() {
+    private fun submit() {
         val currentState = uiState.value as UiState.Success
         val errors = validateForm(
             email = currentState.email,
@@ -54,11 +54,11 @@ class ForgotPasswordViewModel
             ))
         }
     }
-    fun emitSideEffect(effect: SideEffect) {
+    private fun emitSideEffect(effect: SideEffect) {
         viewModelScope.emitSideEffect(effect)
     }
 
-    fun closeDialog() {
+    private fun closeDialog() {
         updateUiState(newUiState = UiState.Success(email = "", isInputEnabled = true, showDialog = false))
         viewModelScope.launch {
             delay(500)

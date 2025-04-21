@@ -4,6 +4,10 @@ import androidx.datastore.core.DataStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cinee.datastore.model.UserAccount
+import com.example.cinee.feature.auth.domain.usecase.EmailPasswordSignInUseCase
+import com.example.cinee.feature.auth.domain.usecase.FacebookSignInUseCase
+import com.example.cinee.feature.auth.domain.usecase.GoogleSignInUseCase
+import com.example.cinee.feature.auth.domain.usecase.PhoneNumberSignInUseCase
 import com.example.cinee.mvi.MVI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import com.example.cinee.mvi.mvi
@@ -18,6 +22,10 @@ import javax.inject.Inject
 class SignInViewModel
     @Inject constructor(
         private val dataStore: DataStore<UserAccount>,
+        private val googleSignInUseCase: GoogleSignInUseCase,
+        private val facebookSignInUseCase: FacebookSignInUseCase,
+        private val phoneNumberSignInUseCase: PhoneNumberSignInUseCase,
+        private val emailPasswordSignInUseCase: EmailPasswordSignInUseCase
     )
     :ViewModel(),MVI<UiState,UiAction,SideEffect> by mvi(initialUiState()) {
 
@@ -44,17 +52,17 @@ class SignInViewModel
         }
     }
 
-    fun changeEmail(email: String) {
+    private fun changeEmail(email: String) {
         val uiState = uiState.value as UiState.Success
         updateUiState(newUiState = uiState.copy(email = email))
     }
 
-    fun changePassword(password: String) {
+    private fun changePassword(password: String) {
         val uiState = uiState.value as UiState.Success
         updateUiState(newUiState = uiState.copy(password = password))
     }
 
-    fun submit() {
+    private fun submit() {
         val currentState = uiState.value as UiState.Success
         val errors = validateForm(
             email = currentState.email,
@@ -70,14 +78,14 @@ class SignInViewModel
         }
     }
 
-    fun emitSideEffect(effect: SideEffect) {
+    private fun emitSideEffect(effect: SideEffect) {
         viewModelScope.emitSideEffect(effect)
     }
 
-    fun signInWithGoogle() {
+    private fun signInWithGoogle() {
     }
 
-    fun signInWithFacebook() {
+    private fun signInWithFacebook() {
     }
 
     private fun clearEmailError() {

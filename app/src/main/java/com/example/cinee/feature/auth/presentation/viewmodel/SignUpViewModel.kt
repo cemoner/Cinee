@@ -2,6 +2,7 @@ package com.example.cinee.feature.auth.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.cinee.feature.auth.domain.usecase.EmailPasswordSignInUseCase
 import com.example.cinee.feature.auth.presentation.contract.SignUpContract.UiAction
 import com.example.cinee.feature.auth.presentation.contract.SignUpContract.SideEffect
 import com.example.cinee.feature.auth.presentation.contract.SignUpContract.UiState
@@ -14,6 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SignUpViewModel @Inject constructor(
+    private val emailPasswordSignUpUseCase: EmailPasswordSignInUseCase
 )
     : ViewModel(),MVI<UiState, UiAction,SideEffect> by mvi(initialUiState()) {
 
@@ -43,27 +45,27 @@ class SignUpViewModel @Inject constructor(
         }
     }
 
-    fun changeName(name: String) {
+    private fun changeName(name: String) {
         val uiState = uiState.value as UiState.Success
         updateUiState(newUiState = uiState.copy(name = name))
     }
 
-    fun changeEmail(email: String) {
+    private fun changeEmail(email: String) {
         val uiState = uiState.value as UiState.Success
         updateUiState(newUiState = uiState.copy(email = email))
     }
 
-    fun changePassword(password: String) {
+    private fun changePassword(password: String) {
         val uiState = uiState.value as UiState.Success
         updateUiState(newUiState = uiState.copy(password = password))
     }
 
-    fun changeConfirmPassword(confirmPassword: String) {
+    private fun changeConfirmPassword(confirmPassword: String) {
         val uiState = uiState.value as UiState.Success
         updateUiState(newUiState = uiState.copy(confirmPassword = confirmPassword))
     }
 
-    fun submit() {
+    private fun submit() {
         val currentState = uiState.value as UiState.Success
         val errors = validateForm(
             email = currentState.email,

@@ -102,7 +102,7 @@ fun ForgotPasswordContent(
                     enabled = uiState.isInputEnabled
                 )
                 CustomAlertDialog(
-                    text = "If an account with that email exists, a password reset link has been sent",
+                    text = "If an account with that email exists, a password reset link has been sent. Check your email please.",
                     title = "Password Reset",
                     confirmText = "OK",
                     onConfirmation = { onAction(UiAction.CloseDialog) },
