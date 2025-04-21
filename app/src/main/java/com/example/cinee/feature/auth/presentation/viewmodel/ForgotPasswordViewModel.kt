@@ -1,0 +1,56 @@
+package com.example.cinee.feature.auth.presentation.viewmodel
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.cinee.feature.auth.presentation.contract.ForgotPasswordContract.UiState
+import com.example.cinee.feature.auth.presentation.contract.ForgotPasswordContract.UiAction
+import com.example.cinee.feature.auth.presentation.contract.ForgotPasswordContract.SideEffect
+import com.example.cinee.mvi.MVI
+import com.example.cinee.mvi.mvi
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@HiltViewModel
+class ForgotPasswordViewModel
+    @Inject constructor():ViewModel(), MVI<UiState, UiAction,SideEffect> by mvi(initialUiState()) {
+
+        init {
+            updateUiState(newUiState = UiState.Success(email = "", isInputEnabled = true,false))
+        }
+
+    override fun onAction(uiAction: UiAction) {
+        when (uiAction) {
+            is UiAction.ChangeEmail -> changeEmail(uiAction.email)
+            is UiAction.Submit -> submit()
+            is UiAction.CloseDialog -> {closeDialog()}
+        }
+    }
+
+    fun changeEmail(email: String) {
+        val uiState = uiState.value as UiState.Success
+        updateUiState(newUiState = uiState.copy(email = email))
+    }
+
+    fun submit() {
+        val uiState = uiState.value as UiState.Success
+        updateUiState(newUiState = uiState.copy(isInputEnabled = false, showDialog = true))
+    }
+
+    fun emitSideEffect(effect: SideEffect) {
+        viewModelScope.emitSideEffect(effect)
+    }
+
+    fun closeDialog() {
+
+        updateUiState(newUiState = UiState.Success(email = "", isInputEnabled = true, showDialog = false))
+        viewModelScope.launch {
+            delay(500)
+            emitSideEffect(SideEffect.NavigateToSignInScreen)
+        }
+
+    }
+}
+
+private fun initialUiState():UiState = UiState.Loading

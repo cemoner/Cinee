@@ -19,7 +19,7 @@ fun CustomAlertDialog(
     title: String,
     text: String,
     confirmText: String = "Confirm",
-    dismissText: String = "Dismiss",
+    dismissText: String? = null,
     modifier: Modifier = Modifier,
     showDialog: Boolean = true
 ) {
@@ -44,8 +44,8 @@ fun CustomAlertDialog(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        onConfirmation()
                         onDismissRequest()
+                        onConfirmation()
                     }
                 ) {
                     Text(
@@ -55,15 +55,17 @@ fun CustomAlertDialog(
                 }
             },
             dismissButton = {
-                TextButton(
-                    onClick = onDismissRequest
-                ) {
-                    Text(
-                        text = dismissText,
-                        style = MaterialTheme.typography.labelLarge
-                    )
+                dismissText?.let {
+                    TextButton(
+                        onClick = onDismissRequest
+                    ) {
+                        Text(
+                            text = dismissText,
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    }
                 }
-            },  
+            },
             shape = MaterialTheme.shapes.extraLarge,
             containerColor = MaterialTheme.colorScheme.surface,
             titleContentColor = MaterialTheme.colorScheme.onSurface,
