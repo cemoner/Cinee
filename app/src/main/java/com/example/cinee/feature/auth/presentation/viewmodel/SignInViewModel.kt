@@ -11,15 +11,15 @@ import com.example.cinee.feature.auth.domain.usecase.EmailPasswordSignInUseCase
 import com.example.cinee.feature.auth.domain.usecase.FacebookSignInUseCase
 import com.example.cinee.feature.auth.domain.usecase.GoogleSignInUseCase
 import com.example.cinee.feature.auth.domain.usecase.PhoneNumberSignInUseCase
-import com.example.cinee.mvi.MVI
-import dagger.hilt.android.lifecycle.HiltViewModel
-import com.example.cinee.mvi.mvi
+import com.example.cinee.feature.auth.presentation.contract.SignInContract.SideEffect
 import com.example.cinee.feature.auth.presentation.contract.SignInContract.UiAction
 import com.example.cinee.feature.auth.presentation.contract.SignInContract.UiState
-import com.example.cinee.feature.auth.presentation.contract.SignInContract.SideEffect
 import com.example.cinee.feature.auth.presentation.model.FieldType
 import com.example.cinee.feature.auth.presentation.util.validateForm
+import com.example.cinee.mvi.MVI
 import com.example.cinee.mvi.SideEffectBuffer
+import com.example.cinee.mvi.mvi
+import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -39,13 +39,7 @@ class SignInViewModel
 
 
         init {
-            updateUiState(
-                newUiState = UiState.Success(
-                    email = "",
-                    password = "",
-                    isInputEnabled = true,
-                )
-            )
+            resetState()
         }
 
 
@@ -57,6 +51,7 @@ class SignInViewModel
             is UiAction.SignInWithGoogle -> initiateSocialMediaSignIn("Google")
             is UiAction.SignInWithFacebook -> initiateSocialMediaSignIn("Facebook")
             is UiAction.ClearEmailError -> clearEmailError()
+            is UiAction.ReturnToSignIn -> resetState()
         }
     }
 
@@ -85,12 +80,37 @@ class SignInViewModel
 
     private fun submit() {
         val currentState = uiState.value as UiState.Success
+        val email = currentState.email
+        val password = currentState.password
         val errors = validateForm(
-            email = currentState.email,
+            email = email,
         )
 
         if (errors.isEmpty()) {
-            // Proceed with registration
+            viewModelScope.launch {
+                updateUiState(currentState.copy(
+                    isInputEnabled = false
+                ))
+                updateUiState(UiState.Loading)
+                emailPasswordSignInUseCase(
+                    email = email,
+                    password = password
+                ).onSuccess {
+                    resetState()
+                    val toastEffect = SideEffect.ShowToast("Login successful")
+                    val navigateEffect = SideEffect.NavigateToProfileScreen
+
+                    // Also buffer in the global buffer
+                    SideEffectBuffer.emit(toastEffect)
+                    SideEffectBuffer.emit(navigateEffect)
+                }.onFailure { error ->
+                    val toastEffect = SideEffect.ShowToast("Login failed: ${error.message}")
+                    emitSideEffect(toastEffect)
+                    updateUiState(UiState.Error(error.message ?: "Login failed"))
+            }
+
+
+            }
         } else {
             updateUiState(currentState.copy(
                 emailError = errors[FieldType.EMAIL],
@@ -100,21 +120,15 @@ class SignInViewModel
 
     private fun signInWithGoogle(activityContext: Context) {
         viewModelScope.launch {
+            disableInput()
             updateUiState(UiState.Loading)
 
             googleSignInUseCase(activityContext)
-                .onSuccess { userId ->
-                    updateUiState(UiState.Success(
-                        email = "",
-                        password = "",
-                        isInputEnabled = true,
-                    ))
+                .onSuccess {
+                    resetState()
 
-                    val toastEffect = SideEffect.ShowToast("Google login successful")
-                    val navigateEffect = SideEffect.NavigateToProfileScreen
-
-                    emitSideEffect(toastEffect)
-                    emitSideEffect(navigateEffect)
+                    SideEffectBuffer.emit("Google Sign In Success")
+                    SideEffectBuffer.emit(SideEffect.NavigateToProfileScreen)
                 }
                 .onFailure { error ->
                     val toastEffect = SideEffect.ShowToast("Google login failed: ${error.message}")
@@ -130,17 +144,12 @@ class SignInViewModel
 
     private fun signInWithFacebook(accessToken: String) {
         viewModelScope.launch {
+            disableInput()
             updateUiState(UiState.Loading)
-
-
            facebookSignInUseCase(accessToken)
                 .onSuccess { userId ->
                     Log.d("FacebookLogin", "Success: $userId")
-                    updateUiState(UiState.Success(
-                        email = "",
-                        password = "",
-                        isInputEnabled = true,
-                    ))
+                    resetState()
                     val toastEffect = SideEffect.ShowToast("Facebook login successful")
                     val navigateEffect = SideEffect.NavigateToProfileScreen
 
@@ -157,6 +166,19 @@ class SignInViewModel
         }
     }
 
+    private fun disableInput() {
+        val currentState = uiState.value as UiState.Success
+        updateUiState(currentState.copy(isInputEnabled = false))
+    }
+    private fun resetState() {
+        viewModelScope.launch {
+            updateUiState(UiState.Success(
+                email = "",
+                password = "",
+                isInputEnabled = true,
+            ))
+        }
+    }
     // Public method to be called from UI
     fun handleFacebookToken(token: String) {
         signInWithFacebook(token)

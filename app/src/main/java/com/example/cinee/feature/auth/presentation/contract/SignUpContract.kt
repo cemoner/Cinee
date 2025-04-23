@@ -1,6 +1,7 @@
 package com.example.cinee.feature.auth.presentation.contract
 
 
+
 interface SignUpContract {
     sealed interface UiState {
         data class Success(
@@ -27,9 +28,11 @@ interface SignUpContract {
         object ClearPasswordError : UiAction
         object ClearConfirmPasswordError : UiAction
         object Submit : UiAction
+        object ReturnToSignUp : UiAction
     }
 
     sealed interface SideEffect {
         object NavigateToSignInScreen : SideEffect
+        data class ShowToast(val message: String) : SideEffect
     }
 }

@@ -30,7 +30,6 @@ class AuthenticationRepositoryImpl @Inject constructor(
     @ApplicationContext private val context: Context,
 ):AuthenticationRepository {
 
-    private val credentialManager by lazy { CredentialManager.create(context) }
 
     override suspend fun signInWithEmailAndPassword(
         email: String,
@@ -38,13 +37,13 @@ class AuthenticationRepositoryImpl @Inject constructor(
     ): Result<String> {
         return try {
             val authResult = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+            val user = authResult.user ?: return Result.failure(Exception(mapFirebaseAuthException(NullPointerException("User is null"))))
             dataStore.updateData { currentAccount ->
                 currentAccount.copy(
                     userProfile = UserProfile(
-                        userId = authResult.user?.uid ?: "-1",
-                        name = authResult.user?.displayName ?: "John",
-                        surName = authResult.user?.displayName ?: "Smith",
-                        imageUrl = authResult.user?.photoUrl.toString(),
+                        userId = user.uid,
+                        name = user.displayName ?: "John Smith",
+                        imageUrl = user.photoUrl.toString(),
                     ),
                     isLoggedIn = true,
                 )
@@ -57,10 +56,18 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
     override suspend fun signUpWithEmailAndPassword(
         email: String,
-        password: String
+        password: String,
+        name: String
     ): Result<String> {
         return try {
             val authResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+            val user = authResult.user ?: return Result.failure(Exception(mapFirebaseAuthException(NullPointerException("User is null"))))
+            val profileUpdates = com.google.firebase.auth.userProfileChangeRequest {
+                displayName = name
+            }
+
+            user.updateProfile(profileUpdates).await()
+
             Result.success(authResult.user?.uid.orEmpty())
         } catch (e: Exception) {
             Result.failure(Exception(mapFirebaseAuthException(e)))
@@ -72,8 +79,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
     }
 
     // Google sign in
-
-    suspend fun isSignedIn(): Boolean {
+    private suspend fun isSignedIn(): Boolean {
         val currentUser = firebaseAuth.currentUser
         if (currentUser != null) {
             try {
@@ -105,7 +111,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
         }
     }
 
-    suspend fun handleSignInWithGoogle(result: GetCredentialResponse): Result<String> {
+    private suspend fun handleSignInWithGoogle(result: GetCredentialResponse): Result<String> {
         val credential = result.credential
         if (credential is CustomCredential && credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
             try {
@@ -118,8 +124,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
                     currentAccount.copy(
                         userProfile = UserProfile(
                             userId = user.uid,
-                            name = user.displayName ?: "User",
-                            surName = user.displayName?.split(" ")?.lastOrNull() ?: "",
+                            name = user.displayName ?: "John Smith",
                             imageUrl = user.photoUrl.toString(),
                         ),
                         isLoggedIn = true,
@@ -167,8 +172,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
                 currentAccount.copy(
                     userProfile = UserProfile(
                         userId = user.uid,
-                        name = user.displayName ?: "User",
-                        surName = user.displayName?.split(" ")?.lastOrNull() ?: "",
+                        name = user.displayName ?: "John Smith",
                         imageUrl = user.photoUrl.toString(),
                     ),
                     isLoggedIn = true,
@@ -182,6 +186,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
         }
     }
 
+    // Sign out
     override suspend fun signOut(): Result<String> {
         return try {
             try {
@@ -193,7 +198,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
                 }
             } catch (e: Exception) {
                 Log.w("Auth", "Failed to clear credential state", e)
-                // Continue with signout anyway
+                // Continue with sign out anyway
             }
 
             firebaseAuth.signOut()
@@ -201,8 +206,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
                 currentAccount.copy(
                     userProfile = UserProfile(
                         userId = "-1",
-                        name = "John",
-                        surName = "Smith",
+                        name = "John Smith",
                         imageUrl = "",
                     ),
                     isLoggedIn = false
@@ -214,6 +218,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
         }
     }
 
+    // Reset password
     override suspend fun resetPassword(email: String): Result<String> {
         return try {
             firebaseAuth.sendPasswordResetEmail(email).await()

@@ -19,6 +19,7 @@ interface SignInContract {
         object Submit : UiAction
         object SignInWithGoogle : UiAction
         object SignInWithFacebook : UiAction
+        object ReturnToSignIn : UiAction
     }
 
     sealed interface SideEffect {

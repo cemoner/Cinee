@@ -1,5 +1,6 @@
 package com.example.cinee.feature.auth.presentation.composable
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,12 +9,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.cinee.component.button.PrimaryButton
 import com.example.cinee.component.input.CustomTextField
 import com.example.cinee.component.input.PasswordTextField
 import com.example.cinee.component.spacer.ShortcutSpacer
+import com.example.cinee.component.state.ErrorContent
+import com.example.cinee.component.state.LoadingContent
 import com.example.cinee.component.text.BodyText
 import com.example.cinee.component.text.ClickableText
 import com.example.cinee.component.text.HeaderText
@@ -42,19 +46,19 @@ fun SignUpContent(
     navigateToSignInScreen: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
+    val context = LocalContext.current
 
 
     CollectSideEffect(sideEffect) {
         when (it) {
             is SideEffect.NavigateToSignInScreen -> navigateToSignInScreen()
+            is SideEffect.ShowToast ->  Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
         }
     }
 
-
-
     when(uiState) {
-        is UiState.Error -> TODO()
-        is UiState.Loading -> TODO()
+        is UiState.Error -> ErrorContent(errorMessage = uiState.message, onRetry = {onAction(UiAction.ReturnToSignUp)}, buttonText = "Return to Sign Up")
+        is UiState.Loading -> LoadingContent()
         is UiState.Success -> {
             Column(
                 modifier = Modifier.fillMaxSize().padding(Dimens.paddingLarge),

@@ -15,8 +15,7 @@ object UserAccountSerializer: Serializer<UserAccount> {
         get() = UserAccount(
             userProfile = UserProfile(
                 userId = "-1",
-                name = "John",
-                surName = "Smith",
+                name = "John Smith",
                 imageUrl = ""
             ),
             userPreferences = UserPreferences()

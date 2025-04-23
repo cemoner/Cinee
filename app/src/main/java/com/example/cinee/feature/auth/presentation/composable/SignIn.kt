@@ -25,6 +25,8 @@ import com.example.cinee.component.button.PrimaryButton
 import com.example.cinee.component.input.CustomTextField
 import com.example.cinee.component.input.PasswordTextField
 import com.example.cinee.component.spacer.ShortcutSpacer
+import com.example.cinee.component.state.ErrorContent
+import com.example.cinee.component.state.LoadingContent
 import com.example.cinee.component.text.BodyText
 import com.example.cinee.component.text.ClickableText
 import com.example.cinee.component.text.HeaderText
@@ -79,8 +81,8 @@ fun SignInContent(
         }
     }
     when(uiState){
-        is UiState.Error -> {}
-        is UiState.Loading -> {}
+        is UiState.Error -> ErrorContent(errorMessage = uiState.message, onRetry = {onAction(UiAction.ReturnToSignIn)}, buttonText = "Return to Sign In")
+        is UiState.Loading -> LoadingContent()
         is UiState.Success -> {
             Column(
                 modifier = Modifier.fillMaxSize().padding(Dimens.paddingLarge),
