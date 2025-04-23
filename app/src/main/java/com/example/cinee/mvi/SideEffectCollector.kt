@@ -11,23 +11,39 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 
 @Composable
-fun <SideEffect> CollectSideEffect(
-    sideEffect: Flow<SideEffect>,
+fun <T> CollectSideEffect(
+    sideEffect: Flow<T>,
+    processBuffer: Boolean = true,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     minActiveState: Lifecycle.State = Lifecycle.State.STARTED,
     context: CoroutineContext = Dispatchers.Main.immediate,
-    onSideEffect: suspend CoroutineScope.(effect: SideEffect) -> Unit,
+    onSideEffect: suspend CoroutineScope.(effect: T) -> Unit,
 ) {
+    // Collect standard side effects
     LaunchedEffect(sideEffect, lifecycleOwner) {
         lifecycleOwner.lifecycle.repeatOnLifecycle(minActiveState) {
-            if (context == EmptyCoroutineContext) {
-                sideEffect.collect { onSideEffect(it) }
-            } else {
-                withContext(context) {
-                    sideEffect.collect { onSideEffect(it) }
+            withContext(context) {
+                sideEffect.collect { effect ->
+                    onSideEffect(effect)
+                }
+            }
+        }
+    }
+
+    // Collect buffered side effects if enabled
+    if (processBuffer) {
+        LaunchedEffect(Unit) {
+            SideEffectBuffer.buffer.collect { bufferedEffect ->
+                try {
+                    // Use unchecked cast with try-catch for safety
+                    @Suppress("UNCHECKED_CAST")
+                    val typedEffect = bufferedEffect as T
+                    onSideEffect(typedEffect)
+                    SideEffectBuffer.resetReplayCache()
+                } catch (e: ClassCastException) {
+                    // Not the right type for this collector, ignore
                 }
             }
         }

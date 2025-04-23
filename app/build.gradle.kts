@@ -90,6 +90,7 @@ dependencies {
     implementation(libs.androidx.material3.lint)
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.material3.window.size.class1.android)
+    implementation(libs.firebase.vertexai)
     annotationProcessor(libs.room.compiler)
 
     // Dependency Injection
@@ -142,4 +143,11 @@ dependencies {
 
     // Splash Screen Api
     implementation(libs.androidx.core.splashscreen)
+
+    // Authentication
+    implementation (libs.facebook.login)
+    implementation(libs.googleid)
+    implementation(libs.play.services.auth)
+
+
 }

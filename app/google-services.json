@@ -12,7 +12,20 @@
           "package_name": "com.example.cinee"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "401365433102-nhfptfg86rbv45cauf0fl6n549lodh4i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cinee",
+            "certificate_hash": "60145ff58b1fa869139e383d71a5010fa5fcd974"
+          }
+        },
+        {
+          "client_id": "401365433102-9v8npuo709rp4esldqunijerne989u77.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDU7zexsoCl-gmeJkACRAqpZUXwQrd3eLk"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "401365433102-9v8npuo709rp4esldqunijerne989u77.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

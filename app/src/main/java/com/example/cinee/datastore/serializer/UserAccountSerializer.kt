@@ -14,7 +14,7 @@ object UserAccountSerializer: Serializer<UserAccount> {
     override val defaultValue: UserAccount
         get() = UserAccount(
             userProfile = UserProfile(
-                userId = -1,
+                userId = "-1",
                 name = "John",
                 surName = "Smith",
                 imageUrl = ""

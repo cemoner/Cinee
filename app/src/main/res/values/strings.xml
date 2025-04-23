@@ -3,4 +3,13 @@
     <string name="home">Home</string>
     <string name="watchlist">Watchlist</string>
     <string name="profile">Profile</string>
+
+
+    <string name="facebook_app_id">1208040127585016</string>
+    <string name="fb_login_protocol_scheme">fb1208040127585016</string>
+    <string name="facebook_client_token">724b82c968f7a2bc27cbc964d2a8d0ab</string>
+
+    <string name="default_web_client_id">401365433102-9v8npuo709rp4esldqunijerne989u77.apps.googleusercontent.com</string>
+
+
 </resources>

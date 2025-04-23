@@ -7,7 +7,7 @@ import com.example.cinee.feature.auth.presentation.contract.SignUpContract.UiAct
 import com.example.cinee.feature.auth.presentation.contract.SignUpContract.SideEffect
 import com.example.cinee.feature.auth.presentation.contract.SignUpContract.UiState
 import com.example.cinee.feature.auth.presentation.model.FieldType
-import com.example.cinee.feature.auth.presentation.validateForm
+import com.example.cinee.feature.auth.presentation.util.validateForm
 import com.example.cinee.mvi.MVI
 import com.example.cinee.mvi.mvi
 import dagger.hilt.android.lifecycle.HiltViewModel

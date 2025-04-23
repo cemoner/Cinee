@@ -1,10 +1,12 @@
 package com.example.cinee.main
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -32,7 +34,10 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -45,13 +50,22 @@ import com.example.cinee.component.appbar.CineeTopAppBarDefaults
 import com.example.cinee.component.navigation.CustomNavigationBar
 import com.example.cinee.datastore.model.UserAccount
 import com.example.cinee.datastore.serializer.UserAccountSerializer
+import com.example.cinee.feature.auth.domain.bus.SocialSignInBus
+import com.example.cinee.feature.auth.presentation.viewmodel.SignInViewModel
 import com.example.cinee.navigation.createGraph
 import com.example.cinee.navigation.model.BottomNavigationItem
 import com.example.cinee.navigation.model.Destination
 import com.example.cinee.navigation.navigateTo
 import com.example.cinee.navigation.popBackStack
 import com.example.cinee.ui.theme.CineeTheme
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 val Context.dataStore: DataStore<UserAccount> by dataStore(
@@ -61,7 +75,49 @@ val Context.dataStore: DataStore<UserAccount> by dataStore(
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private lateinit var callbackManager: CallbackManager
+    private val viewModel: SignInViewModel by viewModels()
+
+    @Inject
+    lateinit var socialSignInBus: SocialSignInBus
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        callbackManager = CallbackManager.Factory.create()
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                launch {
+                    socialSignInBus.facebookSignInRequested.collect {
+                        LoginManager.getInstance().logInWithReadPermissions(
+                            this@MainActivity,
+                            listOf("email", "public_profile")
+                        )
+                    }
+                }
+                launch {
+                    socialSignInBus.googleSignInRequested.collect {
+                        viewModel.startGoogleSignIn(this@MainActivity)
+                    }
+                }
+            }
+        }
+
+        LoginManager.getInstance().registerCallback(callbackManager,
+            object : FacebookCallback<LoginResult> {
+                override fun onSuccess(result: LoginResult) {
+                    viewModel.handleFacebookToken(result.accessToken.token)
+                }
+
+                override fun onCancel() {
+                    viewModel.handleFacebookSignInCancel()
+                }
+
+                override fun onError(error: FacebookException) {
+                    viewModel.handleFacebookSignInError(error.message ?: "Facebook login failed")
+                }
+            })
+
         super.onCreate(savedInstanceState)
         installSplashScreen().apply {
             this.setKeepOnScreenCondition {
@@ -79,6 +135,13 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    // Use this instead of onActivityResult
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        callbackManager.onActivityResult(requestCode, resultCode, data)
+    }
+
 }
 
 @Composable
@@ -162,7 +225,7 @@ fun AppContent(
         }
     ) { innerPadding ->
         NavHost(navController = navController,
-            startDestination = Destination.AuthenticationGraph,
+            startDestination = Destination.Home,
             modifier = Modifier.padding(innerPadding),
             enterTransition = { slideInHorizontally() },
             exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Up, animationSpec = tween(100)) },
@@ -175,6 +238,8 @@ fun AppContent(
     }
 
 }
+
+
 
 private fun checkHasRoute(currentDestination:NavDestination?,destination: Destination):Boolean{
     return try {

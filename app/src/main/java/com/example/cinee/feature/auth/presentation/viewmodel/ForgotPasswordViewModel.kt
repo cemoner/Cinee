@@ -6,7 +6,7 @@ import com.example.cinee.feature.auth.presentation.contract.ForgotPasswordContra
 import com.example.cinee.feature.auth.presentation.contract.ForgotPasswordContract.UiAction
 import com.example.cinee.feature.auth.presentation.contract.ForgotPasswordContract.SideEffect
 import com.example.cinee.feature.auth.presentation.model.FieldType
-import com.example.cinee.feature.auth.presentation.validateForm
+import com.example.cinee.feature.auth.presentation.util.validateForm
 import com.example.cinee.mvi.MVI
 import com.example.cinee.mvi.mvi
 import dagger.hilt.android.lifecycle.HiltViewModel

@@ -1,4 +1,4 @@
-package com.example.cinee.feature.auth.presentation
+package com.example.cinee.feature.auth.presentation.util
 
 import com.example.cinee.feature.auth.presentation.model.FieldType
 
