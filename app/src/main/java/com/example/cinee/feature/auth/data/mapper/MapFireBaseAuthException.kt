@@ -1,5 +1,6 @@
 package com.example.cinee.feature.auth.data.mapper
 
+import com.example.cinee.feature.auth.domain.AuthCancelledException
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthInvalidUserException
@@ -7,6 +8,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException
 
 fun mapFirebaseAuthException(e: Exception): String {
     return when (e) {
+        is AuthCancelledException -> e.message ?: "Authentication cancelled"
         is FirebaseAuthInvalidCredentialsException -> "Invalid credentials. Please check your email and password."
         is FirebaseAuthInvalidUserException -> "No account found with this email."
         is FirebaseAuthUserCollisionException -> "An account already exists with this email."

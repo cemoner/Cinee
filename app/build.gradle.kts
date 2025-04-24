@@ -132,6 +132,15 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    // Mockito for mocking
+    testImplementation (libs.mockito.core)
+    testImplementation (libs.mockito.kotlin) // For Kotlin support
+
+    // MockK for Kotlin-specific mocking
+    testImplementation (libs.mockk.v1135)
+
+    // Coroutine testing
+    testImplementation (libs.kotlinx.coroutines.test.v164)
 
     // Jetpack Datastore
     implementation (libs.androidx.datastore.preferences)

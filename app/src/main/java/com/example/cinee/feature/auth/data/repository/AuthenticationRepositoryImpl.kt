@@ -12,6 +12,7 @@ import com.example.cinee.R
 import com.example.cinee.datastore.model.UserAccount
 import com.example.cinee.datastore.model.UserProfile
 import com.example.cinee.feature.auth.data.mapper.mapFirebaseAuthException
+import com.example.cinee.feature.auth.domain.AuthCancelledException
 import com.example.cinee.feature.auth.domain.repository.AuthenticationRepository
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
@@ -104,9 +105,13 @@ class AuthenticationRepositoryImpl @Inject constructor(
         return try {
             val result = buildCredentialRequest(activityContext)
             handleSignInWithGoogle(result)
-        } catch (e: Exception) {
+        }
+        catch (e: CancellationException) {
+            Result.failure(AuthCancelledException("Sign-in was cancelled"))
+        }
+
+        catch (e: Exception) {
             Log.e("GoogleSignIn", "Error signing in with Google", e)
-            if (e is CancellationException) throw e
             Result.failure(Exception(mapFirebaseAuthException(e)))
         }
     }
