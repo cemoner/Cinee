@@ -2,6 +2,8 @@ package com.example.cinee.feature.auth.presentation.composable
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -85,7 +88,7 @@ fun SignInContent(
         is UiState.Loading -> LoadingContent()
         is UiState.Success -> {
             Column(
-                modifier = Modifier.fillMaxSize().padding(Dimens.paddingLarge),
+                modifier = Modifier.fillMaxSize().padding(Dimens.paddingLarge).scrollable(rememberScrollState(), orientation = Orientation.Vertical),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

@@ -16,6 +16,7 @@ interface ProfileContract {
     sealed interface UiAction {
         object SignOut : UiAction
         object ChangeDisplayState : UiAction
+        object SaveChanges : UiAction
     }
 
     sealed interface SideEffect {

@@ -225,7 +225,7 @@ fun AppContent(
         }
     ) { innerPadding ->
         NavHost(navController = navController,
-            startDestination = Destination.Home,
+            startDestination = Destination.ProfileGraph,
             modifier = Modifier.padding(innerPadding),
             enterTransition = { slideInHorizontally() },
             exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Up, animationSpec = tween(100)) },
