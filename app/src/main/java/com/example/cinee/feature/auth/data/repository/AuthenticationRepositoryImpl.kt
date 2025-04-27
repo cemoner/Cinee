@@ -20,6 +20,7 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingExcept
 import com.google.firebase.auth.FacebookAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.userProfileChangeRequest
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.tasks.await
@@ -38,7 +39,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
     ): Result<String> {
         return try {
             val authResult = firebaseAuth.signInWithEmailAndPassword(email, password).await()
-            val user = authResult.user ?: return Result.failure(Exception(mapFirebaseAuthException(NullPointerException("User is null"))))
+            val user = authResult.user ?: return Result.failure(Exception(mapFirebaseAuthException(NullPointerException("NULL_USER"))))
             dataStore.updateData { currentAccount ->
                 currentAccount.copy(
                     userProfile = UserProfile(
@@ -62,8 +63,8 @@ class AuthenticationRepositoryImpl @Inject constructor(
     ): Result<String> {
         return try {
             val authResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
-            val user = authResult.user ?: return Result.failure(Exception(mapFirebaseAuthException(NullPointerException("User is null"))))
-            val profileUpdates = com.google.firebase.auth.userProfileChangeRequest {
+            val user = authResult.user ?: return Result.failure(Exception(mapFirebaseAuthException(NullPointerException("NULL_USER"))))
+            val profileUpdates = userProfileChangeRequest {
                 displayName = name
             }
 
@@ -98,7 +99,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
 
     override suspend fun signInWithGoogle(activityContext: Context): Result<String> {
         if (isSignedIn()) {
-            val userId = firebaseAuth.currentUser?.uid ?: return Result.failure(Exception(mapFirebaseAuthException(NullPointerException("ID Not Found"))))
+            val userId = firebaseAuth.currentUser?.uid ?: return Result.failure(Exception(mapFirebaseAuthException(NullPointerException("ID_NOT_FOUND"))))
             return Result.success(userId)
         }
 
@@ -123,7 +124,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
                 val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.data)
                 val authCredential = GoogleAuthProvider.getCredential(googleIdTokenCredential.idToken, null)
                 val authResult = firebaseAuth.signInWithCredential(authCredential).await()
-                val user = authResult.user ?: return Result.failure(Exception(mapFirebaseAuthException(NullPointerException("Firebase user is null"))))
+                val user = authResult.user ?: return Result.failure(Exception(mapFirebaseAuthException(NullPointerException("NULL_USER"))))
 
                 dataStore.updateData { currentAccount ->
                     currentAccount.copy(
@@ -171,7 +172,7 @@ class AuthenticationRepositoryImpl @Inject constructor(
         return try {
             val credential = FacebookAuthProvider.getCredential(accessToken)
             val authResult = firebaseAuth.signInWithCredential(credential).await()
-            val user = authResult.user ?: return Result.failure(Exception(mapFirebaseAuthException(NullPointerException("Firebase user is null"))))
+            val user = authResult.user ?: return Result.failure(Exception(mapFirebaseAuthException(NullPointerException("NULL_USER"))))
 
             dataStore.updateData { currentAccount ->
                 currentAccount.copy(
