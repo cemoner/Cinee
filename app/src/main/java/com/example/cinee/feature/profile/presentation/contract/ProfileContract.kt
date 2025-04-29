@@ -17,11 +17,14 @@ interface ProfileContract {
         object SignOut : UiAction
         object ChangeDisplayState : UiAction
         object SaveChanges : UiAction
+        data class UpdateName(val name: String) : UiAction
+        data class UpdateEmail(val email: String) : UiAction
     }
 
     sealed interface SideEffect {
         object NavigateToSignInScreen : SideEffect
         data class ShowToast(val message: String) : SideEffect
+
     }
 }
 

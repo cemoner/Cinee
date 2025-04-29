@@ -76,10 +76,10 @@ fun AvatarImage(
 }
 
 enum class AvatarSize(val size: Dp) {
-    Small(32.dp),
-    Medium(48.dp),
-    Large(64.dp),
-    ExtraLarge(96.dp)
+    Small(48.dp),
+    Medium(64.dp),
+    Large(96.dp),
+    ExtraLarge(128.dp)
 }
 
 @Preview(name = "Avatar Image", showBackground = true)

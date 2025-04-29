@@ -27,7 +27,7 @@ fun HeaderText(
     Text(
         text = text,
         modifier = modifier,
-        color = color ?: MaterialTheme.colorScheme.onSurfaceVariant,
+        color = color ?: MaterialTheme.colorScheme.onSurface,
         textAlign = textAlign,
         maxLines = maxLines,
         overflow = overflow,
